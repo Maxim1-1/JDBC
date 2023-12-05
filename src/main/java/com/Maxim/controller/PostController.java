@@ -24,8 +24,7 @@ public class PostController {
 
         HashMap<String, String> dataFromConsole = postView.create();
 
-//        TODO id gener и время поста
-        post.setId(12121);
+
 
         Writer writer = null;
         if (dataFromConsole.get("writerId") != null) {
@@ -40,17 +39,15 @@ public class PostController {
             writerService.save(writer);
         }
 
-        post.setCreated("test");
-        post.setUpdated("test");
         post.setContent(dataFromConsole.get("postText"));
         post.setPostStatus(PostStatus.UNDER_REVIEW);
         post.setWriterId(writer.getId());
 
 
         Label label = new Label();
-        label.setId(3533);
+
         label.setName(dataFromConsole.get("labelPost"));
-        label.setPostId(post.getId());
+//        label.setPostId(post.getId());
 
         JDBCLabelRepositoryImpl jdbcLabelRepository = new JDBCLabelRepositoryImpl();
         jdbcLabelRepository.save(label);

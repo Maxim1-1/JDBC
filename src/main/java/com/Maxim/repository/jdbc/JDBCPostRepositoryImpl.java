@@ -59,13 +59,13 @@ public class JDBCPostRepositoryImpl implements PostRepository {
 
                 JDBCLabelRepositoryImpl jdbcLabelRepository = new JDBCLabelRepositoryImpl();
 
-                List<Label> labels = jdbcLabelRepository.getAll();
-                List<Label> sortedLabel = labels.stream().filter(label -> label.getPostId()==id).collect(Collectors.toList());
+                Label label = new Label();
+
 
                 Post post = new Post();
 
                 post.setId(id);
-                post.setLabels(sortedLabel);
+//                post.setLabels(sortedLabel);
                 post.setContent(content);
                 post.setCreated(created);
                 post.setUpdated(updated);
@@ -84,15 +84,16 @@ public class JDBCPostRepositoryImpl implements PostRepository {
 
     @Override
     public void save(Post post) {
-        try {
-            crudOperation.insert(tableName,"id,content, created,updated, writerId, status",
-                    String.format("%s, '%s','%s','%s',%s,'%s'",post.getId(),post.getContent(),post.getCreated(),post.getUpdated(),post.getWriterId(),post.getPostStatus()));
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            System.out.println("Хранилище пусто");
-        }
+        HashMap<String,Object> newPostParams = new HashMap<>();
 
+        newPostParams.put("id",post.getId());
+        newPostParams.put("content",post.getContent());
+        newPostParams.put("created",post.getCreated());
+        newPostParams.put("updated",post.getUpdated());
+        newPostParams.put("writerId",post.getWriterId());
+        newPostParams.put("status",post.getPostStatus());
 
+        crudOperation.insert(tableName,newPostParams);
     }
 
     @Override
@@ -100,54 +101,24 @@ public class JDBCPostRepositoryImpl implements PostRepository {
         HashMap<String,Object> updatePostParams = new HashMap<>();
 
         updatePostParams.put("id",updatePost.getId());
-        updatePostParams.put("id",updatePost.getContent());
-        updatePostParams.put("id",updatePost.getUpdated());
-        updatePostParams.put("id",updatePost.getCreated());
-        updatePostParams.put("id",updatePost.getWriterId());
-        updatePostParams.put("id",updatePost.getLabels());
+        updatePostParams.put("content",updatePost.getContent());
+        updatePostParams.put("created",updatePost.getCreated());
+        updatePostParams.put("updated",updatePost.getUpdated());
+        updatePostParams.put("writerId",updatePost.getWriterId());
+        updatePostParams.put("status",updatePost.getPostStatus());
 
-
-
-//        crudOperation.updateById();
-
-
-
-//        "content":"test"
-
-//        "update ? set %s  where = ?"
-
-
-//        1.  пройти по всей мапе -> content = ?,... // "update ? set content = ?, created = ?  where = ?"
-//        2.  for value in hashmap:
-//        counter = 1;
-//                if value is int:
-//                  statment.setInt(counter, value)
-//                if value is int:
-////                  statment.setString(counter, value)
-//                 и для Enum
-//
-//
-//
-//
-//
-//
-//        3.
-//
-//
-
-
-// нужно идти по хэшмапе и
-
-
-//        String parameters = String.format("set content = '%s', created = '%s', updated = '%s', writerId = %s, status = '%s'",
-//                updatePost.getContent(),updatePost.getCreated(),updatePost.getUpdated(),updatePost.getWriterId(), updatePost.getPostStatus());
-//        String condition = String.format("where id = %s",updatePost.getId());
-
-//        crudOperation.update(tableName,parameters,condition);
+        crudOperation.updateById(tableName,updatePostParams,updatePost.getId());
     }
 
     @Override
     public void deleteById(Integer id) {
-        crudOperation.delete(tableName,String.format("where id = %s",id));
+
+        Post deletePost = getAll().stream()
+                .filter(label -> label.getId() == id)
+                .findFirst()
+                .orElse(null);
+
+        deletePost.setPostStatus(PostStatus.DELETED);
+        update(deletePost);
     }
 }

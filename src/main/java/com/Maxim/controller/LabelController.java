@@ -14,9 +14,6 @@ public class LabelController {
     public void save() {
         Label label = new Label();
         HashMap<String, String> dataFromConsole = labelView.create();
-
-//        TODO и в других местаъ id пусть геенрится
-        label.setId(234243);
         label.setName(dataFromConsole.get("labelName"));
         labelService.createLabel(label);
     }

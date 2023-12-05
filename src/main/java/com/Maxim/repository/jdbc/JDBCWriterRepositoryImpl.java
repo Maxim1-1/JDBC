@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,16 +67,24 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
 
     @Override
     public void save(Writer writer) {
-        crudOperation.insert(tableName,"id,firstName,lastName",String.format("%s, '%s', '%s'",
-                writer.getId(), writer.getFirstName(), writer.getLastName()));
+        HashMap<String,Object> newWriterParams = new HashMap<>();
 
+        newWriterParams.put("id",writer.getId());
+        newWriterParams.put("firstName",writer.getFirstName());
+        newWriterParams.put("lastName",writer.getLastName());
+
+        crudOperation.insert(tableName,newWriterParams);
     }
 
     @Override
     public void update(Writer updateWriter) {
-        crudOperation.update(tableName,String.format("set firstName = '%s', lastName = '%s'", updateWriter.getFirstName(),updateWriter.getLastName()),
-                String.format("where id = %s",updateWriter.getId()));
+        HashMap<String,Object> updateWriterParams = new HashMap<>();
 
+        updateWriterParams.put("id",updateWriter.getId());
+        updateWriterParams.put("firstName",updateWriter.getFirstName());
+        updateWriterParams.put("lastName",updateWriter.getLastName());
+
+        crudOperation.updateById(tableName, updateWriterParams,updateWriter.getId());
     }
 
     @Override

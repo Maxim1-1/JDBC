@@ -17,19 +17,13 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
 
     private CrudOperation crudOperation = new CrudOperation();
     private String tableName = "label";
+
     @Override
     public Label getById(Integer id) {
-
-        try {
-            return getAll().stream()
-                    .filter(label -> label.getId() == id)
-                    .findFirst()
-                    .orElse(null);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            System.out.println("Хранилище пусто");
-        }
-        return null;
+        return getAll().stream()
+                .filter(label -> label.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -53,7 +47,6 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
                 Label label = new Label();
                 label.setId(id);
                 label.setName(labelName);
-                label.setPostId(postId);
                 labels.add(label);
 
             }
@@ -67,31 +60,26 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
 
     @Override
     public void save(Label label) {
-        try {
-            crudOperation.insert(tableName,"id,name,postId",String.format("%s, '%s',%s",label.getId(),label.getName(),label.getPostId()));
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            System.out.println("Хранилище пусто");
-        }
+        HashMap<String, Object> newLabelParams = new HashMap<>();
 
+        newLabelParams.put("id", label.getId());
+        newLabelParams.put("name", label.getName());
 
+        crudOperation.insert(tableName, newLabelParams);
     }
 
     @Override
     public void update(Label label) {
+        HashMap<String, Object> updateLabelParams = new HashMap<>();
 
-        HashMap<String,Object> updatePostParams = new HashMap<>();
+        updateLabelParams.put("id", label.getId());
+        updateLabelParams.put("name", label.getName());
 
-        updatePostParams.put("id",label.getId());
-        updatePostParams.put("name",label.getName());
-
-        crudOperation.updateById(tableName,updatePostParams,label.getId());
-
-//        crudOperation.update(tableName,String.format("set name = '%s'",label.getName()),String.format("where id = %s",label.getId()));
+        crudOperation.updateById(tableName, updateLabelParams, label.getId());
     }
 
     @Override
     public void deleteById(Integer id) {
-        crudOperation.delete(tableName,String.format("where id = %s",id));
+        crudOperation.delete(tableName, String.format("where id = %s", id));
     }
 }

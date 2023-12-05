@@ -1,7 +1,9 @@
 package com.Maxim.view;
 
+import com.Maxim.model.Label;
 import com.Maxim.model.Post;
 import com.Maxim.model.PostStatus;
+import com.Maxim.repository.jdbc.JDBCPostLabelRepository;
 
 import java.util.*;
 
@@ -50,9 +52,17 @@ public class PostView extends BaseView{
     }
 
     public void getPostById(Post post){
-//        TODO доделать выподет всех заголовком
-        System.out.print(String.format("id = %s, created = %s, updated = %s, label = %s, content = %s",
-                post.getId(), post.getCreated(), post.getUpdated(), post.getLabels(),post.getContent()));
+        JDBCPostLabelRepository jdbcPostLabelRepository = new JDBCPostLabelRepository();
+
+        List<Label> labels = jdbcPostLabelRepository.getPostsById(post.getId());
+        post.setLabels(labels);
+
+        System.out.print(String.format("id = %s, created = %s, updated = %s, content = %s\n",
+                post.getId(), post.getCreated(), post.getUpdated(),post.getContent()));
+        System.out.print("Теги поста: \n");
+        for (Label labenName: post.getLabels()) {
+            System.out.print(labenName.getName()+"\n");
+        }
 
     }
 

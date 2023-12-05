@@ -6,7 +6,7 @@ import java.util.Map;
 public class CrudUtils {
 
 
-    public static String updateUtil(HashMap<String, Object> parametrsValue){
+    public static String updateUtil(HashMap<String, Object> parametrsValue) {
 
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, Object> entry : parametrsValue.entrySet()) {
@@ -19,14 +19,25 @@ public class CrudUtils {
         return result;
     }
 
-    public static String insertUtil(HashMap<String, Object> parametrsValue){
+    public static HashMap<String, String> insertUtil(HashMap<String, Object> parametrsValue) {
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder columns = new StringBuilder();
+        StringBuilder values = new StringBuilder();
+
         for (Map.Entry<String, Object> entry : parametrsValue.entrySet()) {
-            sb.append(entry.getKey())
+            columns.append(entry.getKey())
+                    .append(", ");
+
+            values
+                    .append("?")
                     .append(", ");
         }
-        String result = sb.substring(0, sb.length() - ", ".length());
+        String columnsFormated = columns.substring(0, columns.length() - ", ".length());
+        String valuesFormated = values.substring(0, values.length() - ", ".length());
+
+        HashMap<String, String> result = new HashMap<>();
+        result.put("columns", columnsFormated);
+        result.put("values", valuesFormated);
         return result;
     }
 

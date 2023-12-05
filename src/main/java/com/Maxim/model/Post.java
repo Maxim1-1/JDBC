@@ -1,5 +1,7 @@
 package com.Maxim.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -13,7 +15,15 @@ public class Post {
     private int writerId;
 
     public Post() {
+
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        String formattedDate = dateFormat.format(currentDate);
+
         this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
+        this.created = formattedDate;
+        this.updated = formattedDate;
     }
 
     public int getWriterId() {
