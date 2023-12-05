@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class JDBCWriterRepositoryImpl implements WriterRepository {
 
-    private String tableName = "task2_2.writer";
+    private String tableName = "writer";
     private CrudOperation crudOperation = new CrudOperation();
 
     @Override

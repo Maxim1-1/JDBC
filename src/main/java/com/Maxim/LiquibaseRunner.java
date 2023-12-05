@@ -20,7 +20,8 @@ public class LiquibaseRunner {
         try ( Connection connection = Connector.getConnect()){
            Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
-            liquibase.Liquibase liquibase = new liquibase.Liquibase("src\\main\\resources\\db\\changelog\\changelog-master.yaml", new ClassLoaderResourceAccessor(), database);
+            liquibase.Liquibase liquibase = new liquibase.Liquibase("db/changelog/changeset/create.yaml",
+                    new ClassLoaderResourceAccessor(), database);
             liquibase.update(new Contexts(), new LabelExpression());
 
         } catch (SQLException e) {

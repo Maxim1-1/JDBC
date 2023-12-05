@@ -10,12 +10,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class JDBCLabelRepositoryImpl implements LabelRepository {
 
     private CrudOperation crudOperation = new CrudOperation();
-    private String tableName = "task2_2.label";
+    private String tableName = "label";
     @Override
     public Label getById(Integer id) {
 
@@ -77,7 +78,15 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
 
     @Override
     public void update(Label label) {
-        crudOperation.update(tableName,String.format("set name = '%s'",label.getName()),String.format("where id = %s",label.getId()));
+
+        HashMap<String,Object> updatePostParams = new HashMap<>();
+
+        updatePostParams.put("id",label.getId());
+        updatePostParams.put("name",label.getName());
+
+        crudOperation.updateById(tableName,updatePostParams,label.getId());
+
+//        crudOperation.update(tableName,String.format("set name = '%s'",label.getName()),String.format("where id = %s",label.getId()));
     }
 
     @Override

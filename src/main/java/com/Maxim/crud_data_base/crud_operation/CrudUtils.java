@@ -1,33 +1,34 @@
 package com.Maxim.crud_data_base.crud_operation;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class CrudUtils {
-    public static HashMap<String, String> convertColumnAndValuesForExpression(String[] nameColumns, String[] values) {
 
-        HashMap<String, String> data = new HashMap<>();
-        String columns = String.join(", ", nameColumns);
-        String val = String.join(", ", values);
 
-        StringBuilder result = new StringBuilder();
-        String[] parts = val.split(",");
-        for (String part : parts) {
-            part = part.trim();
-            if (part.matches("\\d+")) {
-                result.append(part);
-            } else {
-                result.append("'").append(part).append("'");
-            }
-            result.append(", ");
+    public static String updateUtil(HashMap<String, Object> parametrsValue){
+
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Object> entry : parametrsValue.entrySet()) {
+            sb.append(entry.getKey())
+                    .append(" = ")
+                    .append("?")
+                    .append(", ");
         }
-        String readyValues = result.toString();
-        if (readyValues.endsWith(", ")) {
-            readyValues = readyValues.substring(0, readyValues.length() - 2);
-        }
-
-
-        data.put("columns", columns);
-        data.put("values", readyValues);
-        return data;
+        String result = sb.substring(0, sb.length() - ", ".length());
+        return result;
     }
+
+    public static String insertUtil(HashMap<String, Object> parametrsValue){
+
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Object> entry : parametrsValue.entrySet()) {
+            sb.append(entry.getKey())
+                    .append(", ");
+        }
+        String result = sb.substring(0, sb.length() - ", ".length());
+        return result;
+    }
+
+
 }

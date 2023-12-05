@@ -1,18 +1,22 @@
 package com.Maxim.model;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Label {
     private int id;
     private String name;
+    private int postId;
+
+    public Label() {
+        this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
+    }
 
     public int getPostId() {
         return postId;
     }
-
     public void setPostId(int postId) {
         this.postId = postId;
     }
-
-    private int postId;
 
     public int getId() {
         return id;

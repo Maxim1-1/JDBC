@@ -4,27 +4,19 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Writer {
+    private int id;
+    private String firstName;
+    private String lastName;
+    private List<Post> post;
 
-    @Override
-    public String toString() {
-        return "Writer{"
-                +
-                "id="+id+
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", post=" + post +
-                '}';
+
+    public Writer() {
+        this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
     }
 
     public void setId(int id) {
         this.id = id;
     }
-
-//    private static int id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);;
-    private  int id ;
-    private String firstName;
-    private String lastName;
-    private List<Post> post;
     public int getId() {
         return id;
     }

@@ -1,60 +1,103 @@
 package com.Maxim;
 
+import com.Maxim.command_user_handler.UserHandler;
+import com.Maxim.crud_data_base.base.Connector;
+import com.Maxim.crud_data_base.crud_operation.CrudOperation;
+import com.Maxim.crud_data_base.crud_operation.CrudUtils;
+import com.Maxim.utils.CredentialsUtils;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Scanner;
+
 public class Runner {
     public static void main(String[] args) {
-//        ResultSet resultSet = stmt.executeQuery(s);
 
-        LiquibaseRunner liquibase = new LiquibaseRunner();
-        liquibase.run();
+//        1 метод
+        HashMap<String, Object> s = new HashMap<>();
+        s.put("id", 1);
+        s.put("name", "test");
 
-//        UserHandler.getCommandConsole();
 
-//        Post post = new Post();
+
+//        StringBuilder sb = new StringBuilder();
+//        for (Map.Entry<String, Object> entry : s.entrySet()) {
+//            sb.append(entry.getKey())
+//                    .append(" = ")
+//                    .append("?")
+//                    .append(", ");
+//        }
 //
-//        HashMap<String, String> updatedData = new HashMap();
-//        updatedData.put("content", "dffssfdsf");
-//        updatedData.put("created", "dffssfdsf");
+//        String result = sb.substring(0, sb.length() - ", ".length());
+
+
+//        2 метод
+//        try (Connection connector = Connector.getConnect();
 //
-//        updatedData.forEach((key, value) -> {
-//            switch (key) {
-//                case "content":
-//                    post.setContent(updatedData.get("content"));
-//                    break;
-//                case "created":
-//                    post.setCreated(updatedData.get("content"));
-//                    break;
-//                case "updated":
-//                    post.setUpdated(updatedData.get("content"));
-//                    break;
+////             String ss = "update"+ "?" + "set ";
+////             update t set id = ?, content = ?  where = t
+//
+//             PreparedStatement statement = connector.prepareStatement(String.format("update label set %s  where id = 1",result))) {
+//
+//            int count=1;
+//            for (Map.Entry<String, Object> entry : s.entrySet()) {
+//
+//                String key = entry.getKey();
+//                Object value = entry.getValue();
+//
+//                if (value instanceof Integer) {
+//                    statement.setInt(count++, (Integer) value);
+//                } else if (value instanceof String){
+//                    statement.setString(count++,String.valueOf(value));
+//                } else {
+////                    enum
+//                }
+//
 //            }
-//        });
-
-//        System.out.print(post.toString());
-
-//        CrudOperation crudOperation = new CrudOperation();
-//        crudOperation.insert("task2_2.label", new String[]{"id","name","postId"}, new String[]{"45666","еуыеfdgf","5"});
-//        crudOperation.update("task2_2.label", "set name='max'","where id=3");
-//        crudOperation.delete("task2_2.label","where id=3");
-
-
-//        ResultSet set = null;
-//        try {
-//            set = crudOperation.read("*", "task2_2.label", "");
-//            while (set.next()) {
-//                int id = set.getInt("id");
-//                String str = set.getString("name");
-//                int id2 = set.getInt("postId");
-//
-//                System.out.print(id + " " + str + " " + id2 + "\n");
-//            }
-//
-//
+//            statement.executeUpdate();
 //        } catch (SQLException e) {
 //            throw new RuntimeException(e);
 //        }
 //
+
+//
+//
 //
 
 
+
+
+
+
+
+
+
+
+
+
+        Scanner scanner = new Scanner(System.in);
+
+        LiquibaseRunner liquibase = new LiquibaseRunner();
+        liquibase.run();
+
+        while (true) {
+            System.out.println("Для выхода еще раз введите exit, для продолжения введите любой символ");
+
+            String input = scanner.nextLine();
+            if (input.equals("exit")) {
+                break;
+            } else {
+                UserHandler.getCommandConsole();
+            }
+
+        }
     }
 }

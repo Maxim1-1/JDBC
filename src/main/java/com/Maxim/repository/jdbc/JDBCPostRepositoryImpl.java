@@ -12,12 +12,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class JDBCPostRepositoryImpl implements PostRepository {
 
-    private String tableName = "task2_2.post";
+    private String tableName = "post";
     private CrudOperation crudOperation = new CrudOperation();
 
     @Override
@@ -71,7 +72,6 @@ public class JDBCPostRepositoryImpl implements PostRepository {
                 post.setPostStatus(PostStatus.valueOf(status));
                 post.setWriterId(writerId);
                 posts.add(post);
-
             }
 
         } catch (SQLException e) {
@@ -97,10 +97,53 @@ public class JDBCPostRepositoryImpl implements PostRepository {
 
     @Override
     public void update(Post updatePost) {
+        HashMap<String,Object> updatePostParams = new HashMap<>();
 
-        crudOperation.update(tableName,String.format("set content = '%s', created = '%s', updated = '%s', writerId = %s, status = '%s'",
-                        updatePost.getContent(),updatePost.getCreated(),updatePost.getUpdated(),updatePost.getWriterId(), updatePost.getPostStatus()),
-                String.format("where id = %s",updatePost.getId()));
+        updatePostParams.put("id",updatePost.getId());
+        updatePostParams.put("id",updatePost.getContent());
+        updatePostParams.put("id",updatePost.getUpdated());
+        updatePostParams.put("id",updatePost.getCreated());
+        updatePostParams.put("id",updatePost.getWriterId());
+        updatePostParams.put("id",updatePost.getLabels());
+
+
+
+//        crudOperation.updateById();
+
+
+
+//        "content":"test"
+
+//        "update ? set %s  where = ?"
+
+
+//        1.  пройти по всей мапе -> content = ?,... // "update ? set content = ?, created = ?  where = ?"
+//        2.  for value in hashmap:
+//        counter = 1;
+//                if value is int:
+//                  statment.setInt(counter, value)
+//                if value is int:
+////                  statment.setString(counter, value)
+//                 и для Enum
+//
+//
+//
+//
+//
+//
+//        3.
+//
+//
+
+
+// нужно идти по хэшмапе и
+
+
+//        String parameters = String.format("set content = '%s', created = '%s', updated = '%s', writerId = %s, status = '%s'",
+//                updatePost.getContent(),updatePost.getCreated(),updatePost.getUpdated(),updatePost.getWriterId(), updatePost.getPostStatus());
+//        String condition = String.format("where id = %s",updatePost.getId());
+
+//        crudOperation.update(tableName,parameters,condition);
     }
 
     @Override

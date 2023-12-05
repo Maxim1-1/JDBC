@@ -4,7 +4,7 @@ databaseChangeLog:
       author: your_name
       changes:
         - createTable:
-            tableName: Writer
+            tableName: writer
             columns:
               - column:
                   name: id
@@ -18,3 +18,51 @@ databaseChangeLog:
               - column:
                   name: lastName
                   type: varchar(255)
+        - createTable:
+            tableName: post
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: content
+                  type: varchar(255)
+              - column:
+                  name: created
+                  type: date
+              - column:
+                  name: updated
+                  type: date
+              - column:
+                  name: writerId
+                  type: int
+              - column:
+                  name: status
+                  type: enum('ACTIVE', 'UNDER_REVIEW', 'DELETED')
+        - createTable:
+            tableName: label
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: postId
+                  type: int
+        - createTable:
+            tableName: post_labels
+            columns:
+              - column:
+                  name: postId
+                  type: int
+              - column:
+                  name: labelId
+                  type: int

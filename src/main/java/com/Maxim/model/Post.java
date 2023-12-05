@@ -1,6 +1,7 @@
 package com.Maxim.model;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Post {
     private int id;
@@ -9,8 +10,11 @@ public class Post {
     private String updated;
     private PostStatus postStatus;
     private List<Label> labels;
-
     private int writerId;
+
+    public Post() {
+        this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
+    }
 
     public int getWriterId() {
         return writerId;
@@ -24,24 +28,9 @@ public class Post {
         return postStatus;
     }
 
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", content='" + content + '\'' +
-                ", created='" + created + '\'' +
-                ", updated='" + updated + '\'' +
-                ", postStatus=" + postStatus +
-                ", labels=" + labels +
-                ", writerId=" + writerId +
-                '}';
-    }
-
     public void setPostStatus(PostStatus postStatus) {
         this.postStatus = postStatus;
     }
-
-
 
     public int getId() {
         return id;
@@ -82,8 +71,5 @@ public class Post {
     public void setLabels(List<Label> labels) {
         this.labels = labels;
     }
-
-
-
 
 }
