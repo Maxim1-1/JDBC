@@ -74,6 +74,7 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
             System.out.println("Хранилище пусто");
         }
 
+
     }
 
     @Override
