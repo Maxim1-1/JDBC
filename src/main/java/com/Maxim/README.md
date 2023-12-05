@@ -1,15 +1,19 @@
-create writer 
-update writer
-delete writer
-get writer
+## Начало работы
+При запуске приложения необходимо заполнить следующие параметры:\
 
-create post
-update post
-delete post
-get post
+host - ссылка на хост где запущена Mysql\
+login - логин для подключения\
+password - пароль для подключения\
+db - имя вашей базы данных\
 
-create label
-update label
-delete label
-get label
+Пример
+- host=jdbc:mysql://localhost:3306/
+- login=root
+- password=root
+- db=world
 
+Обратите внимание, что при запуске приложения в указанной вами базе данных, будут созданы следующие таблицы
+Writer, Post,Label , Post_labels. Для корректной работы приложения убедитесь, что в вашей БД отсутствовали таблицы с похожими именами, 
+
+## Запуск приложения
+Откройте класс Runner, запустите метод main.
