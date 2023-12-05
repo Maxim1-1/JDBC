@@ -2,11 +2,8 @@ package com.Maxim.crud_data_base.base;
 
 import com.Maxim.utils.CredentialsUtils;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.*;
-import java.util.Properties;
+
 
 public class Connector {
 

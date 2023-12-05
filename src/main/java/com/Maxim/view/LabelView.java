@@ -1,8 +1,6 @@
 package com.Maxim.view;
 
 import com.Maxim.model.Label;
-import com.Maxim.model.Writer;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;

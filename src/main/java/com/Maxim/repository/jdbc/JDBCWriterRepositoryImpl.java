@@ -74,6 +74,7 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
         newWriterParams.put("lastName",writer.getLastName());
 
         crudOperation.insert(tableName,newWriterParams);
+        System.out.print("writer успешно сохранен, "+"id = "+writer.getId());
     }
 
     @Override
@@ -85,10 +86,12 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
         updateWriterParams.put("lastName",updateWriter.getLastName());
 
         crudOperation.updateById(tableName, updateWriterParams,updateWriter.getId());
+        System.out.print("writer успешно обновлен");
     }
 
     @Override
     public void deleteById(Integer writerId) {
         crudOperation.delete(tableName,String.format("where id = %s",writerId));
+        System.out.print("writer успешно удален");
     }
 }

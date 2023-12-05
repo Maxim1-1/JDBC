@@ -5,6 +5,7 @@ import com.Maxim.model.Post;
 import com.Maxim.model.PostStatus;
 import com.Maxim.model.Writer;
 import com.Maxim.repository.jdbc.JDBCLabelRepositoryImpl;
+import com.Maxim.repository.jdbc.JDBCPostLabelRepository;
 import com.Maxim.service.PostService;
 import com.Maxim.service.WriterService;
 import com.Maxim.view.PostView;
@@ -23,8 +24,6 @@ public class PostController {
         Post post = new Post();
 
         HashMap<String, String> dataFromConsole = postView.create();
-
-
 
         Writer writer = null;
         if (dataFromConsole.get("writerId") != null) {
@@ -45,12 +44,12 @@ public class PostController {
 
 
         Label label = new Label();
-
         label.setName(dataFromConsole.get("labelPost"));
-//        label.setPostId(post.getId());
-
         JDBCLabelRepositoryImpl jdbcLabelRepository = new JDBCLabelRepositoryImpl();
         jdbcLabelRepository.save(label);
+
+        JDBCPostLabelRepository jdbcPostLabelRepository = new JDBCPostLabelRepository();
+        jdbcPostLabelRepository.save(post,label);
 
         List<Label> labels = new ArrayList<>();
         labels.add(label);

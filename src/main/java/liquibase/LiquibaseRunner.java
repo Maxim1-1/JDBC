@@ -1,4 +1,4 @@
-package com.Maxim;
+package liquibase;
 
 import com.Maxim.crud_data_base.base.Connector;
 

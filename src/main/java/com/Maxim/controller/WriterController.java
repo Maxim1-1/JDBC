@@ -1,6 +1,5 @@
 package com.Maxim.controller;
 
-import com.Maxim.model.PostStatus;
 import com.Maxim.model.Writer;
 import com.Maxim.service.WriterService;
 import com.Maxim.view.WriterView;

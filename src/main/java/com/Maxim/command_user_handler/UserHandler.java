@@ -66,7 +66,6 @@ public class UserHandler {
             case "delete post by id":
                 postController.deleteWriterById();
                 break;
-
             case "exit":
                 break;
             default:

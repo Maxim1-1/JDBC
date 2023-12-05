@@ -3,6 +3,7 @@ package com.Maxim.repository.jdbc;
 import com.Maxim.crud_data_base.base.Connector;
 import com.Maxim.crud_data_base.crud_operation.CrudOperation;
 import com.Maxim.model.Label;
+import com.Maxim.model.Post;
 import com.Maxim.service.LabelService;
 
 import java.sql.Connection;
@@ -10,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class JDBCPostLabelRepository {
@@ -44,4 +46,14 @@ public class JDBCPostLabelRepository {
         }
         return labels;
     }
+
+    public void save(Post post, Label label){
+        HashMap<String, Object> newLabelParams = new HashMap<>();
+
+        newLabelParams.put("postId", post.getId());
+        newLabelParams.put("labelId", label.getId());
+
+        crudOperation.insert(tableName, newLabelParams);
+    }
+
 }

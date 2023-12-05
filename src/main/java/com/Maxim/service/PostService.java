@@ -1,10 +1,9 @@
 package com.Maxim.service;
 
-import com.Maxim.model.Label;
+
 import com.Maxim.model.Post;
-import com.Maxim.model.Writer;
 import com.Maxim.repository.jdbc.JDBCPostRepositoryImpl;
-import com.Maxim.repository.jdbc.JDBCWriterRepositoryImpl;
+
 
 import java.util.List;
 

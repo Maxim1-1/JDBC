@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class JDBCPostRepositoryImpl implements PostRepository {
 
@@ -57,15 +57,14 @@ public class JDBCPostRepositoryImpl implements PostRepository {
                 String status = resultSet.getString("status");
                 Integer writerId = resultSet.getInt("writerId");
 
-                JDBCLabelRepositoryImpl jdbcLabelRepository = new JDBCLabelRepositoryImpl();
+                JDBCPostLabelRepository jdbcPostLabelRepository = new JDBCPostLabelRepository();
 
-                Label label = new Label();
-
+                List<Label> labels = jdbcPostLabelRepository.getPostsById(id);
 
                 Post post = new Post();
 
                 post.setId(id);
-//                post.setLabels(sortedLabel);
+                post.setLabels(labels);
                 post.setContent(content);
                 post.setCreated(created);
                 post.setUpdated(updated);
@@ -94,6 +93,7 @@ public class JDBCPostRepositoryImpl implements PostRepository {
         newPostParams.put("status",post.getPostStatus());
 
         crudOperation.insert(tableName,newPostParams);
+        System.out.print("post успешно сохранен, "+"id = "+post.getId());
     }
 
     @Override
@@ -108,6 +108,7 @@ public class JDBCPostRepositoryImpl implements PostRepository {
         updatePostParams.put("status",updatePost.getPostStatus());
 
         crudOperation.updateById(tableName,updatePostParams,updatePost.getId());
+        System.out.print("post успешно обновлен");
     }
 
     @Override
@@ -120,5 +121,6 @@ public class JDBCPostRepositoryImpl implements PostRepository {
 
         deletePost.setPostStatus(PostStatus.DELETED);
         update(deletePost);
+        System.out.print("post успешно удален");
     }
 }

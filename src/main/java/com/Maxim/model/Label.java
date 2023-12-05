@@ -7,7 +7,7 @@ public class Label {
     private String name;
 
     public Label() {
-        this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
+        this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE)+1;
     }
 
 

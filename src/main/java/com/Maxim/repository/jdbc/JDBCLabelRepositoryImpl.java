@@ -41,14 +41,12 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
 
             while (resultSet.next()) {
                 Integer id = resultSet.getInt("id");
-                Integer postId = resultSet.getInt("postId");
                 String labelName = resultSet.getString("name");
 
                 Label label = new Label();
                 label.setId(id);
                 label.setName(labelName);
                 labels.add(label);
-
             }
 
         } catch (SQLException e) {
@@ -66,6 +64,7 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
         newLabelParams.put("name", label.getName());
 
         crudOperation.insert(tableName, newLabelParams);
+        System.out.print("label успешно сохранен, "+"id = "+label.getId());
     }
 
     @Override
@@ -76,10 +75,13 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
         updateLabelParams.put("name", label.getName());
 
         crudOperation.updateById(tableName, updateLabelParams, label.getId());
+        System.out.print("label успешно обновлен");
     }
 
     @Override
     public void deleteById(Integer id) {
+
         crudOperation.delete(tableName, String.format("where id = %s", id));
+        System.out.print("label успешно удален");
     }
 }
