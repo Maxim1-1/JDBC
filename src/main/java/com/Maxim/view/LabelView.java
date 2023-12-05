@@ -21,7 +21,6 @@ public class LabelView extends BaseView{
 
     public void getLabelById(Label label){
         System.out.print(String.format("label name = %s",label.getName()));
-
     }
 
     public void getAllLabels(List<Label> labels){

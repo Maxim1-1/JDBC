@@ -7,14 +7,14 @@ import java.util.List;
 
 public class LabelService {
 
-    private static final JDBCLabelRepositoryImpl jdbc = new JDBCLabelRepositoryImpl();
+    private static  JDBCLabelRepositoryImpl jdbc = new JDBCLabelRepositoryImpl();
 
     public void createLabel(Label label) {
         jdbc.save(label);
     }
 
-    public Label getLabelById(Integer writerId){
-        return jdbc.getById(writerId);
+    public Label getLabelById(Integer labelId){
+        return jdbc.getById(labelId);
     }
 
     public List<Label> getAllLabels() {
