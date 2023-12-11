@@ -8,7 +8,7 @@ import com.Maxim.repository.jdbc.JDBCLabelRepositoryImpl;
 import com.Maxim.repository.jdbc.JDBCPostLabelRepository;
 import com.Maxim.service.PostService;
 import com.Maxim.service.WriterService;
-import com.Maxim.view.PostView;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,14 +16,10 @@ import java.util.List;
 
 public class PostController {
 
-    private static PostService postService = new PostService();
-    private PostView postView = new PostView();
+    private  PostService postService = new PostService();
 
-
-    public void save() {
+    public void savePost(HashMap<String, String> dataFromConsole) {
         Post post = new Post();
-
-        HashMap<String, String> dataFromConsole = postView.create();
 
         Writer writer = null;
         if (dataFromConsole.get("writerId") != null) {
@@ -54,31 +50,24 @@ public class PostController {
         List<Label> labels = new ArrayList<>();
         labels.add(label);
         post.setLabels(labels);
-        postService.create(post);
+        postService.savePost(post);
 
     }
 
 
-    public void getPostById() {
-        Integer writerId = postView.getIdFromConsole("Введите id поста");
-        Post post = postService.getPostById(writerId);
-        postView.getPostById(post);
-
+    public Post getPostById(Integer postId) {
+        return postService.getPostById(postId);
     }
 
-    public void getAllPosts() {
-        postView.getAllPosts(postService.getAllPosts());
+    public List<Post> getAllPosts() {
+        return postService.getAllPosts();
     }
 
-    public void deleteWriterById() {
-        Integer postId = postView.getIdFromConsole("Введите post id для удаления");
+    public void deletePostById(Integer postId) {
         postService.deletePostById(postId);
     }
 
-    public void updatePostById() {
-        Integer postId = postView.getIdFromConsole("Введите поста id для обновления");
-
-        HashMap<String, String> updatedData = postView.updatePostById();
+    public void updatePostById(Integer postId,HashMap<String, String> updatedData) {
 
         Post post = postService.getPostById(postId);
 
@@ -88,7 +77,7 @@ public class PostController {
                     post.setContent(updatedData.get("content"));
                     break;
                 case "created":
-                    post.setCreated(updatedData.get("content"));
+                    post.setCreated(updatedData.get("created"));
                     break;
                 case "updated":
                     post.setUpdated(updatedData.get("updated"));
@@ -102,7 +91,7 @@ public class PostController {
             }
         });
 
-        postService.updatePost(post);
+        postService.updatePostById(post);
     }
 }
 

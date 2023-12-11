@@ -9,7 +9,7 @@ public class LabelService {
 
     private static  JDBCLabelRepositoryImpl jdbc = new JDBCLabelRepositoryImpl();
 
-    public void createLabel(Label label) {
+    public void saveLabel(Label label) {
         jdbc.save(label);
     }
 

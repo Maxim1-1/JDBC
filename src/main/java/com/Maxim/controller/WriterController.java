@@ -21,25 +21,20 @@ public class WriterController {
     }
 
 
-    public void getWriterById() {
-        Integer writerId = writerView.getIdFromConsole("Введите id писателя");
-        Writer writer = writerService.getWriterById(writerId);
-        writerView.getWriterById(writer);
+    public Writer getWriterById(Integer writerId) {
+        return writerService.getWriterById(writerId);
+
     }
 
     public List<Writer> getAllWriter() {
        return writerService.getAllWriters();
     }
 
-    public void deleteWriterById() {
-        Integer writerId = writerView.getIdFromConsole("Введите writer id для удаления");
+    public void deleteWriterById(Integer writerId) {
         writerService.deleteWriterById(writerId);
     }
 
-    public void updateWriterById() {
-        Integer writerId = writerView.getIdFromConsole("Введите поста id для обновления");
-
-        HashMap<String, String> updatedData = writerView.updateWriterById();
+    public void updateWriterById(Integer writerId,HashMap<String, String> updatedData ) {
         Writer writer = writerService.getWriterById(writerId);
 
         updatedData.forEach((key, value) -> {

@@ -11,7 +11,7 @@ public class PostService {
 
     private static final JDBCPostRepositoryImpl jdbc = new JDBCPostRepositoryImpl();
 
-    public void create (Post post) {
+    public void savePost(Post post) {
         jdbc.save(post);
     }
 
@@ -23,7 +23,7 @@ public class PostService {
         return jdbc.getAll();
     }
 
-    public void updatePost(Post post) {
+    public void updatePostById(Post post) {
         jdbc.update(post);
     }
 

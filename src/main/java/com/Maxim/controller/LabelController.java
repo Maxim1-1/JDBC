@@ -5,40 +5,33 @@ import com.Maxim.service.LabelService;
 import com.Maxim.view.LabelView;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class LabelController {
     private  LabelService labelService = new LabelService();
     private  LabelView labelView = new LabelView();
 
 
-    public void save() {
+    public void save(HashMap<String, String> dataFromConsole) {
         Label label = new Label();
-        HashMap<String, String> dataFromConsole = labelView.create();
         label.setName(dataFromConsole.get("labelName"));
-        labelService.createLabel(label);
+        labelService.saveLabel(label);
     }
 
 
-    public void getLabelById() {
-        Integer labelId = labelView.getIdFromConsole("Введите label id");
-        Label label = labelService.getLabelById(labelId);
-        labelView.getLabelById(label);
+    public Label getLabelById(Integer labelId) {
+        return labelService.getLabelById(labelId);
     }
 
-    public void getAllLabels() {
-        labelView.getAllLabels(labelService.getAllLabels());
+    public List<Label> getAllLabels() {
+        return labelService.getAllLabels();
     }
 
-    public void deleteLabelById() {
-        Integer labelId = labelView.getIdFromConsole("Введите label id");
+    public void deleteLabelById(Integer labelId) {
         labelService.deleteLabelById(labelId);
     }
 
-    public void updateLabelById() {
-
-       Integer labelId = labelView.getIdFromConsole("Введите label id для обновления");
-       String newNameLabel = labelView.updateLabelById().get("labelName");
-
+    public void updateLabelById(Integer labelId,String newNameLabel) {
        Label label = new Label();
        label.setId(labelId);
        label.setName(newNameLabel);

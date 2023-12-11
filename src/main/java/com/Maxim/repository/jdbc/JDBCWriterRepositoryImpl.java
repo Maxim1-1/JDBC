@@ -66,8 +66,12 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        if (writers.isEmpty()){
+            return null;
+        } else {
+            return writers;
+        }
 
-        return writers;
     }
 
     @Override
