@@ -3,6 +3,7 @@ package com.Maxim.model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Post {
@@ -31,7 +32,12 @@ public class Post {
     }
 
     public void setWriterId(int writerId) {
-        this.writerId = writerId;
+        try {
+            this.writerId = writerId;
+        } catch (Exception exception) {
+            System.out.print("Проверьте тип вводимых данных, writerId должно быть целым числом");
+            exception.printStackTrace();
+        }
     }
 
     public PostStatus getPostStatus() {

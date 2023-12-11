@@ -23,8 +23,13 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
 
     @Override
     public Writer getById(Integer writerId) {
-        return getAll().stream().filter(writer -> writer.getId() == writerId).findFirst().orElse(null);
-
+        try {
+            return getAll().stream().filter(writer -> writer.getId() == writerId).findFirst().orElse(null);
+        } catch (NullPointerException exception) {
+            System.out.print("укзанного id нет в таблице");
+            exception.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -35,18 +40,18 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
 
         try (Connection connector = Connector.getConnect();
              PreparedStatement statement = connector.prepareStatement(sqlExpression);
-             ) {
+        ) {
 
             statement.execute();
             ResultSet resultSet = statement.getResultSet();
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 Integer id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
 
                 PostService postService = new PostService();
-                List<Post> posts = postService.getAllPosts().stream().filter(post -> post.getWriterId()==id).collect(Collectors.toList());
+                List<Post> posts = postService.getAllPosts().stream().filter(post -> post.getWriterId() == id).collect(Collectors.toList());
 
                 Writer writer = new Writer();
                 writer.setLastName(lastName);
@@ -67,31 +72,41 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
 
     @Override
     public void save(Writer writer) {
-        HashMap<String,Object> newWriterParams = new HashMap<>();
+        HashMap<String, Object> newWriterParams = new HashMap<>();
 
-        newWriterParams.put("id",writer.getId());
-        newWriterParams.put("firstName",writer.getFirstName());
-        newWriterParams.put("lastName",writer.getLastName());
+        newWriterParams.put("id", writer.getId());
+        newWriterParams.put("firstName", writer.getFirstName());
+        newWriterParams.put("lastName", writer.getLastName());
 
-        crudOperation.insert(tableName,newWriterParams);
-        System.out.print("writer успешно сохранен, "+"id = "+writer.getId());
+        crudOperation.insert(tableName, newWriterParams);
+        System.out.print("writer успешно сохранен, " + "id = " + writer.getId());
     }
 
     @Override
     public void update(Writer updateWriter) {
-        HashMap<String,Object> updateWriterParams = new HashMap<>();
+        HashMap<String, Object> updateWriterParams = new HashMap<>();
 
-        updateWriterParams.put("id",updateWriter.getId());
-        updateWriterParams.put("firstName",updateWriter.getFirstName());
-        updateWriterParams.put("lastName",updateWriter.getLastName());
+        updateWriterParams.put("id", updateWriter.getId());
+        updateWriterParams.put("firstName", updateWriter.getFirstName());
+        updateWriterParams.put("lastName", updateWriter.getLastName());
 
-        crudOperation.updateById(tableName, updateWriterParams,updateWriter.getId());
-        System.out.print("writer успешно обновлен");
+        if (getAll().stream().anyMatch(writer -> writer.getId() == updateWriter.getId())) {
+            crudOperation.updateById(tableName, updateWriterParams, updateWriter.getId());
+            System.out.print("writer успешно обновлен");
+
+        } else {
+            System.out.print("укзанного id нет в таблице");
+        }
     }
 
     @Override
     public void deleteById(Integer writerId) {
-        crudOperation.delete(tableName,String.format("where id = %s",writerId));
-        System.out.print("writer успешно удален");
+        try {
+            crudOperation.delete(tableName, String.format("where id = %s", writerId));
+            System.out.print("writer успешно удален");
+        } catch (NullPointerException exception) {
+            System.out.print("укзанного id нет в таблице");
+            exception.printStackTrace();
+        }
     }
 }

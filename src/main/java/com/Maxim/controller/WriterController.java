@@ -5,17 +5,16 @@ import com.Maxim.service.WriterService;
 import com.Maxim.view.WriterView;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class WriterController {
 
-    private static final WriterService writerService = new WriterService();
+    private WriterService writerService = new WriterService();
     private WriterView writerView = new WriterView();
 
 
-    public void save() {
+    public void save(HashMap<String,String> dataFromConsole ) {
         Writer writer = new Writer();
-
-        HashMap<String, String> dataFromConsole = writerView.create();
         writer.setFirstName(dataFromConsole.get("firstName"));
         writer.setLastName(dataFromConsole.get("lastName"));
         writerService.save(writer);
@@ -28,8 +27,8 @@ public class WriterController {
         writerView.getWriterById(writer);
     }
 
-    public void getAllWriter() {
-        writerView.getAllWriters(writerService.getAllWriters());
+    public List<Writer> getAllWriter() {
+       return writerService.getAllWriters();
     }
 
     public void deleteWriterById() {

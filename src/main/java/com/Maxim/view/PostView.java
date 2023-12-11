@@ -51,17 +51,22 @@ public class PostView extends BaseView{
     }
 
     public void getPostById(Post post){
-        JDBCPostLabelRepository jdbcPostLabelRepository = new JDBCPostLabelRepository();
+        try {
+            JDBCPostLabelRepository jdbcPostLabelRepository = new JDBCPostLabelRepository();
 
-        List<Label> labels = jdbcPostLabelRepository.getPostsById(post.getId());
-        post.setLabels(labels);
+            List<Label> labels = jdbcPostLabelRepository.getPostsById(post.getId());
+            post.setLabels(labels);
 
-        System.out.print(String.format("id = %s, created = %s, updated = %s, content = %s\n",
-                post.getId(), post.getCreated(), post.getUpdated(),post.getContent()));
-        System.out.print("Теги поста: \n");
-        for (Label labenName: post.getLabels()) {
-            System.out.print(labenName.getName()+"\n");
-        }
+            System.out.print(String.format("id = %s, created = %s, updated = %s, content = %s\n",
+                    post.getId(), post.getCreated(), post.getUpdated(),post.getContent()));
+            System.out.print("Теги поста: \n");
+            for (Label labenName: post.getLabels()) {
+                System.out.print(labenName.getName()+"\n");
+            }
+        } catch (NullPointerException exception) {
+                System.out.print("укзанного id нет в списке\n");
+                exception.printStackTrace();
+            }
 
     }
 

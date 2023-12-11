@@ -20,10 +20,16 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
 
     @Override
     public Label getById(Integer id) {
-        return getAll().stream()
-                .filter(label -> label.getId() == id)
-                .findFirst()
-                .orElse(null);
+        try {
+            return getAll().stream()
+                    .filter(label -> label.getId() == id)
+                    .findFirst()
+                    .orElse(null);
+        } catch (NullPointerException exception) {
+            System.out.print("укзанного id нет в таблице");
+            exception.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -64,7 +70,7 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
         newLabelParams.put("name", label.getName());
 
         crudOperation.insert(tableName, newLabelParams);
-        System.out.print("label успешно сохранен, "+"id = "+label.getId());
+        System.out.print("label успешно сохранен, " + "id = " + label.getId());
     }
 
     @Override
@@ -74,14 +80,25 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
         updateLabelParams.put("id", label.getId());
         updateLabelParams.put("name", label.getName());
 
-        crudOperation.updateById(tableName, updateLabelParams, label.getId());
-        System.out.print("label успешно обновлен");
+        if (getAll().stream().anyMatch(label1 -> label1.getId()==label.getId())) {
+            crudOperation.updateById(tableName, updateLabelParams, label.getId());
+            System.out.print("label успешно обновлен");
+        } else {
+            System.out.print("укзанного id нет в таблице");
+        }
+
     }
 
     @Override
     public void deleteById(Integer id) {
+        try {
+            crudOperation.delete(tableName, String.format("where id = %s", id));
+            System.out.print("label успешно удален");
 
-        crudOperation.delete(tableName, String.format("where id = %s", id));
-        System.out.print("label успешно удален");
+        } catch (NullPointerException exception) {
+            System.out.print("укзанного id нет в таблице");
+            exception.printStackTrace();
+        }
+
     }
 }

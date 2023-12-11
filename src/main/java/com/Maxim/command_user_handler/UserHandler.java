@@ -3,10 +3,14 @@ package com.Maxim.command_user_handler;
 import com.Maxim.controller.LabelController;
 import com.Maxim.controller.PostController;
 import com.Maxim.controller.WriterController;
+import com.Maxim.view.WriterView;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class UserHandler {
+
+    private static WriterView writerView = new WriterView();
 
     public static void getCommandConsole() {
         WriterController writerController = new WriterController();
@@ -22,10 +26,11 @@ public class UserHandler {
         String command = scanner.nextLine().toLowerCase();
         switch (command) {
             case "create writer":
-                writerController.save();
+                HashMap<String, String> dataFromConsole = writerView.create();
+                writerController.save(dataFromConsole);
                 break;
             case "get all writers":
-                writerController.getAllWriter();
+                writerView.getAllWriters(writerController.getAllWriter());
                 break;
             case "get writer by id":
                 writerController.getWriterById();

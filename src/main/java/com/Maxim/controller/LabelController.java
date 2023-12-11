@@ -7,8 +7,8 @@ import com.Maxim.view.LabelView;
 import java.util.HashMap;
 
 public class LabelController {
-    private static LabelService labelService = new LabelService();
-    private LabelView labelView = new LabelView();
+    private  LabelService labelService = new LabelService();
+    private  LabelView labelView = new LabelView();
 
 
     public void save() {

@@ -20,7 +20,7 @@ public class LabelView extends BaseView{
     }
 
     public void getLabelById(Label label){
-        System.out.print(String.format("label name = %s",label.getName()));
+        System.out.println(String.format("id = %s , label name = %s",label.getId(),label.getName()));
     }
 
     public void getAllLabels(List<Label> labels){
@@ -36,7 +36,6 @@ public class LabelView extends BaseView{
         String labelName = scanner.nextLine();
         userDataFromConsole.put("labelName",labelName);
 
-        System.out.print("Значение обновлено");
         return userDataFromConsole;
     }
 

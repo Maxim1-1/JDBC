@@ -28,9 +28,9 @@ public class JDBCPostRepositoryImpl implements PostRepository {
                     .filter(label -> label.getId() == id)
                     .findFirst()
                     .orElse(null);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            System.out.println("Хранилище пусто");
+        } catch (NullPointerException exception) {
+            System.out.print("укзанного id нет в таблице");
+            exception.printStackTrace();
         }
         return null;
     }
@@ -107,20 +107,28 @@ public class JDBCPostRepositoryImpl implements PostRepository {
         updatePostParams.put("writerId",updatePost.getWriterId());
         updatePostParams.put("status",updatePost.getPostStatus());
 
-        crudOperation.updateById(tableName,updatePostParams,updatePost.getId());
-        System.out.print("post успешно обновлен");
+        if (getAll().stream().anyMatch(post -> post.getId()==updatePost.getId())) {
+            crudOperation.updateById(tableName,updatePostParams,updatePost.getId());
+            System.out.print("post успешно обновлен");
+        } else {
+            System.out.print("укзанного id нет в таблице");
+        }
     }
 
     @Override
     public void deleteById(Integer id) {
+        try {
+            Post deletePost = getAll().stream()
+                    .filter(label -> label.getId() == id)
+                    .findFirst()
+                    .orElse(null);
 
-        Post deletePost = getAll().stream()
-                .filter(label -> label.getId() == id)
-                .findFirst()
-                .orElse(null);
-
-        deletePost.setPostStatus(PostStatus.DELETED);
-        update(deletePost);
-        System.out.print("post успешно удален");
+            deletePost.setPostStatus(PostStatus.DELETED);
+            update(deletePost);
+            System.out.print("post успешно удален");
+        } catch (NullPointerException exception) {
+            System.out.print("укзанного id нет в таблице");
+            exception.printStackTrace();
+        }
     }
 }
