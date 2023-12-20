@@ -3,6 +3,7 @@ package com.Maxim.repository.jdbc;
 import com.Maxim.model.Label;
 import com.Maxim.model.Post;
 import com.Maxim.model.PostStatus;
+import com.Maxim.model.Writer;
 import com.Maxim.repository.PostRepository;
 import com.Maxim.dbutils.Connector;
 import com.Maxim.dbutils.CrudOperation;
@@ -141,23 +142,11 @@ public class JDBCPostRepositoryImpl implements PostRepository {
         }
     }
 
-    private Post mapResultSetToPost(ResultSet resultSet) throws SQLException {
+    private List<Post> mapResultSetToPost(ResultSet resultSet) throws SQLException {
+        List<Post> posts = new ArrayList<>();
+        while (resultSet.next()) {
 
-        String content = resultSet.getString("content");
-        String created = resultSet.getString("created");
-        String updated = resultSet.getString("updated");
-        String status = resultSet.getString("status");
-        Integer writerId = resultSet.getInt("writerId");
-
-
-        Post post = new Post();
-
-        post.setContent(content);
-        post.setCreated(created);
-        post.setUpdated(updated);
-        post.setPostStatus(PostStatus.valueOf(status));
-//        post.setWriterId(writerId);
-
-        return post;
+        }
+        return null;
     }
 }

@@ -33,18 +33,18 @@ public class WriterView extends BaseView {
     }
 
     public void getWriterById(Writer writer) {
-        PostService postService = new PostService();
+//        PostService postService = new PostService();
+//
+//        List<Post> posts = postService.getAllPosts();
 
-        List<Post> posts = postService.getAllPosts();
-
-        System.out.print(String.format("id = %s, first name = %s, last name = %s", writer.getId(), writer.getFirstName(), writer.getLastName()));
-        System.out.print("\nposts: \n");
-        for (Post post: posts) {
+//        System.out.print(String.format("id = %s, first name = %s, last name = %s", writer.getId(), writer.getFirstName(), writer.getLastName()));
+//        System.out.print("\nposts: \n");
+//        for (Post post: posts) {
 //            if (post.getWriterId() == writer.getId()) {
 //                System.out.print(String.format("id: %s, content: %s, created: %s\n",
 //                        post.getId(), post.getContent(), post.getCreated()));
 //            }
-        }
+//        }
     }
 
     public void getAllWriters(List<Writer> writers) {
