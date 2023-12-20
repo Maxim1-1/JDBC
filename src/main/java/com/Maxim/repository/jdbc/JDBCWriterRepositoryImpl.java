@@ -1,18 +1,15 @@
 package com.Maxim.repository.jdbc;
 
-import com.Maxim.model.Label;
-import com.Maxim.model.Post;
-import com.Maxim.model.PostStatus;
 import com.Maxim.model.Writer;
 import com.Maxim.repository.WriterRepository;
 import com.Maxim.dbutils.CrudOperation;
+import com.Maxim.repository.jdbc.mappingUtils.MappingUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class JDBCWriterRepositoryImpl implements WriterRepository {
 
@@ -71,9 +68,9 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     public Writer update(Writer updateWriter) {
         HashMap<String, Object> updateWriterParams = new HashMap<>();
 
-        if (updateWriter.getFirstName()!=null){
+        if (updateWriter.getFirstName() != null) {
             updateWriterParams.put("firstName", updateWriter.getFirstName());
-        } else if (updateWriter.getLastName()!=null) {
+        } else if (updateWriter.getLastName() != null) {
             updateWriterParams.put("lastName", updateWriter.getLastName());
         }
 
@@ -92,10 +89,14 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
             exception.printStackTrace();
         }
     }
+
     private List<Writer> mapResultSetToWriter(ResultSet resultSet) throws SQLException {
         List<Writer> writers = new ArrayList<>();
         while (resultSet.next()) {
             Integer writerId = resultSet.getInt(1);
+            int postId = resultSet.getInt(4);
+            int labelId = resultSet.getInt("labelId");
+
             Writer writer = writers.stream()
                     .filter(writer1 -> writer1.getId() == writerId)
                     .findFirst()
@@ -107,44 +108,8 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
                 writer.setLastName(resultSet.getString("lastName"));
                 writers.add(writer);
             }
-
-            int postId = resultSet.getInt(4);
-            int labelId = resultSet.getInt("labelId");
-
-            JDBCUtils.convertPostAndLabelToModel(resultSet,writer,postId,labelId);
-//
-//            if (postId != 0 & writer.getPosts().stream().anyMatch(post -> post.getId() == postId)) {
-//                Post postWithNewLabel = writer.getPosts().stream()
-//                        .filter(post1 -> post1.getId() == postId)
-//                        .findFirst()
-//                        .orElse(null);
-//                Label label = new Label();
-//                label.setId(labelId);
-//                label.setName(resultSet.getString("name"));
-//                postWithNewLabel.setLabel(label);
-//                List<Post> newPosts = writer.getPosts().stream().map(post -> post.getId() == postId ? postWithNewLabel : post)
-//                        .collect(Collectors.toList());
-//                writer.setPosts(newPosts);
-//
-//            } else if (postId != 0) {
-//                Post post = new Post();
-//                post.setId(postId);
-//                post.setContent(resultSet.getString("content"));
-//                post.setCreated(resultSet.getString("created"));
-//                post.setUpdated(resultSet.getString("updated"));
-//                post.setWriterId(writer);
-//                post.setPostStatus(PostStatus.valueOf(resultSet.getString("status")));
-//                if (labelId != 0) {
-//                    Label label = new Label();
-//                    label.setId(labelId);
-//                    label.setName(resultSet.getString("name"));
-//                    post.setLabel(label);
-//                }
-//                writer.setPost(post);
-//            }
-//            writers.add(writer);
+            MappingUtils.addPostAndLabelToWriter(resultSet, writer, postId, labelId);
         }
-        int i = 1;
         return writers;
     }
 }

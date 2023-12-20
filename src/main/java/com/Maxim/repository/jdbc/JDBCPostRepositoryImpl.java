@@ -7,6 +7,7 @@ import com.Maxim.model.Writer;
 import com.Maxim.repository.PostRepository;
 import com.Maxim.dbutils.Connector;
 import com.Maxim.dbutils.CrudOperation;
+import com.Maxim.repository.jdbc.mappingUtils.MappingUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,49 +39,17 @@ public class JDBCPostRepositoryImpl implements PostRepository {
 
     @Override
     public List<Post> getAll() {
-
-        List<Post> posts = new ArrayList<>();
-
-        String sqlExpression = String.format("select * FROM %s", tableName);
-
-        try (Connection connector = Connector.getConnect();
-             PreparedStatement statement = connector.prepareStatement(sqlExpression)) {
-
-            statement.execute();
-            ResultSet resultSet = statement.getResultSet();
-
-            while (resultSet.next()) {
-
-                Integer id = resultSet.getInt("id");
-                String content = resultSet.getString("content");
-                String created = resultSet.getString("created");
-                String updated = resultSet.getString("updated");
-                String status = resultSet.getString("status");
-                Integer writerId = resultSet.getInt("writerId");
-
-                JDBCPostLabelRepository jdbcPostLabelRepository = new JDBCPostLabelRepository();
-
-                List<Label> labels = jdbcPostLabelRepository.getPostsById(id);
-
-                Post post = new Post();
-
-                post.setId(id);
-                post.setLabels(labels);
-                post.setContent(content);
-                post.setCreated(created);
-                post.setUpdated(updated);
-                post.setPostStatus(PostStatus.valueOf(status));
-//                post.setWriterId(writerId);
-                posts.add(post);
-            }
-
-
+        try {
+            ResultSet resultSet = crudOperation.selectRowQuery(
+                    "SELECT *\n" +
+                            "FROM post\n" +
+                            "LEFT JOIN writer ON post.writerId = writer.id\n" +
+                            "LEFT JOIN post_labels ON post.id = post_labels.postid\n" +
+                            "LEFT JOIN label ON post_labels.labelid = label.id ;");
+            return mapResultSetToPost(resultSet);
         } catch (SQLException e) {
-            System.out.print("Ошибка при выполнении запроса");
             throw new RuntimeException(e);
         }
-
-        return posts;
     }
 
     @Override
@@ -127,26 +96,38 @@ public class JDBCPostRepositoryImpl implements PostRepository {
 
     @Override
     public void deleteById(Integer id) {
-        try {
-            Post deletePost = getAll().stream()
-                    .filter(label -> label.getId() == id)
-                    .findFirst()
-                    .orElse(null);
 
-            deletePost.setPostStatus(PostStatus.DELETED);
-            update(deletePost);
-            System.out.print("post успешно удален");
-        } catch (NullPointerException exception) {
-            System.out.print("укзанного id нет в таблице");
-            exception.printStackTrace();
-        }
     }
 
     private List<Post> mapResultSetToPost(ResultSet resultSet) throws SQLException {
         List<Post> posts = new ArrayList<>();
         while (resultSet.next()) {
+            int postId = resultSet.getInt(1);
+            int labelId = resultSet.getInt("labelId");
 
+            Post post = posts.stream()
+                    .filter(post1 -> post1.getId() == postId)
+                    .findFirst()
+                    .orElse(null);
+            if (post == null) {
+                post = new Post();
+                post.setId(postId);
+                post.setContent(resultSet.getString("content"));
+                post.setCreated(resultSet.getString("created"));
+                post.setUpdated(resultSet.getString("updated"));
+
+                Writer writer = new Writer();
+                writer.setId(resultSet.getInt("writerId"));
+                writer.setFirstName(resultSet.getString("firstName"));
+                writer.setLastName(resultSet.getString("lastName"));
+                post.setWriterId(writer);
+
+                post.setPostStatus(PostStatus.valueOf(resultSet.getString("status")));
+                MappingUtils.addLabelToPost(resultSet,post,labelId);
+                posts.add(post);
+            }
+            MappingUtils.addLabelToPost(resultSet,post,labelId);
+            }
+            return posts;
         }
-        return null;
     }
-}

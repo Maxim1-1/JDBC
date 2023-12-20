@@ -80,7 +80,6 @@ public class DispatcherView {
             case "get all posts":
                 List<Post> posts = postController.getAllPosts();
                 postView.getAllPosts(posts);
-
                 break;
             case "get post by id":
                 Integer postId = postView.getIdFromConsole("Введите id поста");

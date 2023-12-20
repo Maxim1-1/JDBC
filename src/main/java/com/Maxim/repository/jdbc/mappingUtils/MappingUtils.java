@@ -1,4 +1,4 @@
-package com.Maxim.repository.jdbc;
+package com.Maxim.repository.jdbc.mappingUtils;
 
 import com.Maxim.model.Label;
 import com.Maxim.model.Post;
@@ -7,23 +7,20 @@ import com.Maxim.model.Writer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class JDBCUtils {
-    public static void convertPostAndLabelToModel(ResultSet resultSet,Writer writer, Integer postId, Integer labelId) throws SQLException {
+
+public class MappingUtils {
+    public static void addPostAndLabelToWriter(ResultSet resultSet, Writer writer, Integer postId, Integer labelId) throws SQLException {
+
         if (postId != 0 & writer.getPosts().stream().anyMatch(post -> post.getId() == postId)) {
-            Post postWithNewLabel = writer.getPosts().stream()
+            Post post = writer.getPosts().stream()
                     .filter(post1 -> post1.getId() == postId)
                     .findFirst()
                     .orElse(null);
             Label label = new Label();
             label.setId(labelId);
             label.setName(resultSet.getString("name"));
-            postWithNewLabel.setLabel(label);
-            List<Post> newPosts = writer.getPosts().stream().map(post -> post.getId() == postId ? postWithNewLabel : post)
-                    .collect(Collectors.toList());
-            writer.setPosts(newPosts);
+            post.setLabel(label);
 
         } else if (postId != 0) {
             Post post = new Post();
@@ -42,4 +39,19 @@ public class JDBCUtils {
             writer.setPost(post);
         }
     }
+
+    public static void addLabelToPost(ResultSet resultSet, Post post, Integer labelId) throws SQLException {
+        if (labelId != 0 & post.getLabels().isEmpty()) {
+            Label newLabel = new Label();
+            newLabel.setId(labelId);
+            newLabel.setName(resultSet.getString("name"));
+            post.setLabel(newLabel);
+        } else if (post.getLabels().stream().anyMatch(label -> label.getId() != labelId)) {
+            Label newLabel = new Label();
+            newLabel.setId(labelId);
+            newLabel.setName(resultSet.getString("name"));
+            post.setLabel(newLabel);
+        }
+    }
 }
+
