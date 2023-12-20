@@ -64,7 +64,7 @@ public class WriterServiceTest {
         assertEquals(writer.getId(),result.getId());
         assertEquals(writer.getFirstName(),result.getFirstName());
         assertEquals(writer.getLastName(),result.getLastName());
-        assertEquals(writer.getPost(),result.getPost());
+        assertEquals(writer.getPosts(),result.getPosts());
 
     }
 
@@ -116,7 +116,7 @@ public class WriterServiceTest {
         assertEquals(writerFirst.getId(),result.get(0).getId());
         assertEquals(writerFirst.getFirstName(),result.get(0).getFirstName());
         assertEquals(writerFirst.getLastName(),result.get(0).getLastName());
-        assertEquals(writerFirst.getPost(),result.get(0).getPost());
+        assertEquals(writerFirst.getPosts(),result.get(0).getPosts());
 
 
         assertEquals(writerSecond.getId(),result.get(1).getId());

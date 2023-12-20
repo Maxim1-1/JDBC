@@ -33,7 +33,7 @@ public class Writer {
         this.lastName = lastName;
     }
 
-    public List<Post> getPost() {
+    public List<Post> getPosts() {
         return post;
     }
 
