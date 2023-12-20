@@ -23,8 +23,8 @@ public class PostService {
         return jdbc.getAll();
     }
 
-    public void updatePostById(Post post) {
-        jdbc.update(post);
+    public Post updatePostById(Post post) {
+        return jdbc.update(post);
     }
 
     public void deletePostById (Integer id){

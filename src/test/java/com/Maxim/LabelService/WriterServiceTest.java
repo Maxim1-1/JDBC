@@ -1,7 +1,6 @@
 package com.Maxim.LabelService;
 
 import com.Maxim.controller.WriterController;
-import com.Maxim.model.Label;
 import com.Maxim.model.Post;
 import com.Maxim.model.Writer;
 import com.Maxim.service.WriterService;
@@ -57,7 +56,7 @@ public class WriterServiceTest {
         writer.setId(1);
         writer.setFirstName("test1");
         writer.setLastName("lastNameTest");
-        writer.setPost(posts);
+        writer.setPosts(posts);
 
         when(writerService.getWriterById(1)).thenReturn(writer);
         Writer result = writerController.getWriterById(1);
@@ -96,7 +95,7 @@ public class WriterServiceTest {
         writerFirst.setId(1);
         writerFirst.setFirstName("test1");
         writerFirst.setLastName("lastNameTest");
-        writerFirst.setPost(posts);
+        writerFirst.setPosts(posts);
 
         Writer writerSecond = new Writer();
         writerSecond.setId(2);
@@ -152,7 +151,7 @@ public class WriterServiceTest {
         writerMock.setId(1);
         writerMock.setFirstName("test1");
         writerMock.setLastName("lastNameTest");
-        writerMock.setPost(posts);
+        writerMock.setPosts(posts);
 
         when(writerService.getWriterById(1)).thenReturn(writerMock);
 

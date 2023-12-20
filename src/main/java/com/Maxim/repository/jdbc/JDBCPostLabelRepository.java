@@ -1,7 +1,7 @@
 package com.Maxim.repository.jdbc;
 
-import com.Maxim.crud_data_base.base.Connector;
-import com.Maxim.crud_data_base.crud_operation.CrudOperation;
+import com.Maxim.dbutils.Connector;
+import com.Maxim.dbutils.CrudOperation;
 import com.Maxim.model.Label;
 import com.Maxim.model.Post;
 import com.Maxim.service.LabelService;
@@ -53,7 +53,7 @@ public class JDBCPostLabelRepository {
         newLabelParams.put("postId", post.getId());
         newLabelParams.put("labelId", label.getId());
 
-        crudOperation.insert(tableName, newLabelParams);
+//        crudOperation.insert(tableName, newLabelParams);
     }
 
 }

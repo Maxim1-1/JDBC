@@ -1,8 +1,10 @@
 package com.Maxim;
 
-import com.Maxim.command_user_handler.UserHandler;
+import com.Maxim.dbutils.Connector;
+import com.Maxim.view.DispatcherView;
 import com.Maxim.liquibase.LiquibaseRunner;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 
@@ -11,8 +13,8 @@ public class Runner {
 
         Scanner scanner = new Scanner(System.in);
 
-        LiquibaseRunner liquibase = new LiquibaseRunner();
-        liquibase.run();
+//        LiquibaseRunner liquibase = new LiquibaseRunner();
+//        liquibase.run();
 
         while (true) {
             System.out.println("Для выхода еще раз введите exit, для продолжения введите любой символ");
@@ -21,10 +23,18 @@ public class Runner {
             if (input.equals("exit")) {
                 break;
             } else {
-                UserHandler.getCommandConsole();
+                DispatcherView.getCommandConsole();
             }
 
         }
+
+        try {
+            Connector.getConnect().close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+
 
 }

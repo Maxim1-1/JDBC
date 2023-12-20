@@ -36,13 +36,13 @@ public class PostController {
 
         post.setContent(dataFromConsole.get("postText"));
         post.setPostStatus(PostStatus.UNDER_REVIEW);
-        post.setWriterId(writer.getId());
+//        post.setWriterId(writer.getId());
 
 
         Label label = new Label();
         label.setName(dataFromConsole.get("labelPost"));
         JDBCLabelRepositoryImpl jdbcLabelRepository = new JDBCLabelRepositoryImpl();
-        jdbcLabelRepository.save(label);
+//        jdbcLabelRepository.save(label);
 
         JDBCPostLabelRepository jdbcPostLabelRepository = new JDBCPostLabelRepository();
         jdbcPostLabelRepository.save(post,label);
@@ -67,7 +67,7 @@ public class PostController {
         postService.deletePostById(postId);
     }
 
-    public void updatePostById(Integer postId,HashMap<String, String> updatedData) {
+    public Post updatePostById(Integer postId,HashMap<String, String> updatedData) {
 
         Post post = postService.getPostById(postId);
 
@@ -83,7 +83,7 @@ public class PostController {
                     post.setUpdated(updatedData.get("updated"));
                     break;
                 case "writerId":
-                    post.setWriterId(Integer.parseInt(updatedData.get("writerId")));
+//                    post.setWriterId(Integer.parseInt(updatedData.get("writerId")));
                     break;
                 case "status":
                     post.setPostStatus(PostStatus.valueOf(updatedData.get("status")));
@@ -91,7 +91,7 @@ public class PostController {
             }
         });
 
-        postService.updatePostById(post);
+       return postService.updatePostById(post);
     }
 }
 

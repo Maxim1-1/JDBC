@@ -4,8 +4,8 @@ import com.Maxim.model.Label;
 import com.Maxim.model.Post;
 import com.Maxim.model.PostStatus;
 import com.Maxim.repository.PostRepository;
-import com.Maxim.crud_data_base.base.Connector;
-import com.Maxim.crud_data_base.crud_operation.CrudOperation;
+import com.Maxim.dbutils.Connector;
+import com.Maxim.dbutils.CrudOperation;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -69,9 +69,10 @@ public class JDBCPostRepositoryImpl implements PostRepository {
                 post.setCreated(created);
                 post.setUpdated(updated);
                 post.setPostStatus(PostStatus.valueOf(status));
-                post.setWriterId(writerId);
+//                post.setWriterId(writerId);
                 posts.add(post);
             }
+
 
         } catch (SQLException e) {
             System.out.print("Ошибка при выполнении запроса");
@@ -82,37 +83,45 @@ public class JDBCPostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public void save(Post post) {
-        HashMap<String,Object> newPostParams = new HashMap<>();
+    public Post save(Post post) {
+        HashMap<String, Object> newPostParams = new HashMap<>();
 
-        newPostParams.put("id",post.getId());
-        newPostParams.put("content",post.getContent());
-        newPostParams.put("created",post.getCreated());
-        newPostParams.put("updated",post.getUpdated());
-        newPostParams.put("writerId",post.getWriterId());
-        newPostParams.put("status",post.getPostStatus());
+        newPostParams.put("id", post.getId());
+        newPostParams.put("content", post.getContent());
+        newPostParams.put("created", post.getCreated());
+        newPostParams.put("updated", post.getUpdated());
+        newPostParams.put("writerId", post.getWriterId());
+        newPostParams.put("status", post.getPostStatus());
 
-        crudOperation.insert(tableName,newPostParams);
-        System.out.print("post успешно сохранен, "+"id = "+post.getId());
+//        crudOperation.insert(tableName, newPostParams);
+        System.out.print("post успешно сохранен, " + "id = " + post.getId());
+        return post;
     }
 
     @Override
-    public void update(Post updatePost) {
-        HashMap<String,Object> updatePostParams = new HashMap<>();
+    public Post update(Post updatePost) {
+        HashMap<String, Object> updatePostParams = new HashMap<>();
 
-        updatePostParams.put("id",updatePost.getId());
-        updatePostParams.put("content",updatePost.getContent());
-        updatePostParams.put("created",updatePost.getCreated());
-        updatePostParams.put("updated",updatePost.getUpdated());
-        updatePostParams.put("writerId",updatePost.getWriterId());
-        updatePostParams.put("status",updatePost.getPostStatus());
+        updatePostParams.put("id", updatePost.getId());
+        updatePostParams.put("content", updatePost.getContent());
+        updatePostParams.put("created", updatePost.getCreated());
+        updatePostParams.put("updated", updatePost.getUpdated());
+        updatePostParams.put("writerId", updatePost.getWriterId());
+        updatePostParams.put("status", updatePost.getPostStatus());
 
-        if (getAll().stream().anyMatch(post -> post.getId()==updatePost.getId())) {
-            crudOperation.updateById(tableName,updatePostParams,updatePost.getId());
-            System.out.print("post успешно обновлен");
-        } else {
-            System.out.print("укзанного id нет в таблице");
-        }
+//        if (getAll().stream().anyMatch(post -> post.getId() == updatePost.getId())) {
+//            try {
+////                Post post = mapResultSetToPost(crudOperation.updateById(tableName, updatePostParams, updatePost.getId()));
+//
+////                return post;
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
+//        } else {
+//            System.out.print("укзанного id нет в таблице");
+//        }
+
+        return updatePost;
     }
 
     @Override
@@ -130,5 +139,25 @@ public class JDBCPostRepositoryImpl implements PostRepository {
             System.out.print("укзанного id нет в таблице");
             exception.printStackTrace();
         }
+    }
+
+    private Post mapResultSetToPost(ResultSet resultSet) throws SQLException {
+
+        String content = resultSet.getString("content");
+        String created = resultSet.getString("created");
+        String updated = resultSet.getString("updated");
+        String status = resultSet.getString("status");
+        Integer writerId = resultSet.getInt("writerId");
+
+
+        Post post = new Post();
+
+        post.setContent(content);
+        post.setCreated(created);
+        post.setUpdated(updated);
+        post.setPostStatus(PostStatus.valueOf(status));
+//        post.setWriterId(writerId);
+
+        return post;
     }
 }

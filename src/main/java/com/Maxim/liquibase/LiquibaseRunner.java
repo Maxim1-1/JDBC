@@ -1,6 +1,6 @@
 package com.Maxim.liquibase;
 
-import com.Maxim.crud_data_base.base.Connector;
+import com.Maxim.dbutils.Connector;
 
 import liquibase.Contexts;
 import liquibase.LabelExpression;
@@ -34,7 +34,3 @@ public class LiquibaseRunner {
 
     }
 }
-
-//DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
-// Liquibase liquibase new Liquibase("path/to/your/changelog/file.xml", new ClassLoaderResourceAccessor(), database);
-// liquibase.update(""); } } catch (Exception e) { e.printStackTrace(); } } }

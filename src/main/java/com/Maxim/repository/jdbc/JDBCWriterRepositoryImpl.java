@@ -1,20 +1,17 @@
 package com.Maxim.repository.jdbc;
 
+import com.Maxim.model.Label;
 import com.Maxim.model.Post;
+import com.Maxim.model.PostStatus;
 import com.Maxim.model.Writer;
-import com.Maxim.crud_data_base.base.Connector;
 import com.Maxim.repository.WriterRepository;
-import com.Maxim.crud_data_base.crud_operation.CrudOperation;
-import com.Maxim.service.PostService;
+import com.Maxim.dbutils.CrudOperation;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class JDBCWriterRepositoryImpl implements WriterRepository {
 
@@ -23,84 +20,60 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
 
     @Override
     public Writer getById(Integer writerId) {
+
         try {
-            return getAll().stream().filter(writer -> writer.getId() == writerId).findFirst().orElse(null);
-        } catch (NullPointerException exception) {
-            System.out.print("укзанного id нет в таблице");
-            exception.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public List<Writer> getAll() {
-        List<Writer> writers = new ArrayList<>();
-
-        String sqlExpression = String.format("select * FROM %s", tableName);
-
-        try (Connection connector = Connector.getConnect();
-             PreparedStatement statement = connector.prepareStatement(sqlExpression);
-        ) {
-
-            statement.execute();
-            ResultSet resultSet = statement.getResultSet();
-
-            while (resultSet.next()) {
-                Integer id = resultSet.getInt("id");
-                String firstName = resultSet.getString("firstName");
-                String lastName = resultSet.getString("lastName");
-
-                PostService postService = new PostService();
-                List<Post> posts = postService.getAllPosts().stream().filter(post -> post.getWriterId() == id).collect(Collectors.toList());
-
-                Writer writer = new Writer();
-                writer.setLastName(lastName);
-                writer.setFirstName(firstName);
-                writer.setId(id);
-                writer.setPost(posts);
-
-                writers.add(writer);
-
-            }
+            ResultSet resultSet = crudOperation.selectById(tableName, "post", "id", "writerId", writerId);
+            return mapResultSetToWriter(resultSet).get(0);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        if (writers.isEmpty()){
-            return null;
-        } else {
-            return writers;
-        }
-
     }
 
     @Override
-    public void save(Writer writer) {
-        HashMap<String, Object> newWriterParams = new HashMap<>();
+    public List<Writer> getAll() {
+        try {
+//            ResultSet resultSet = crudOperation.selectAll(tableName, "post", "id", "writerId");
+            ResultSet resultSet = crudOperation.selectRowQuery("SELECT *\n" +
+                    "FROM writer\n" +
+                    "LEFT JOIN post ON post.writerId = writer.id\n" +
+                    "LEFT JOIN post_labels ON post.id = post_labels.postid\n" +
+                    "LEFT JOIN label ON post_labels.labelid = label.id ;\n");
+            return mapResultSetToWriter(resultSet);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-        newWriterParams.put("id", writer.getId());
+    @Override
+    public Writer save(Writer writer) {
+
+        HashMap<String, Object> newWriterParams = new HashMap<>();
         newWriterParams.put("firstName", writer.getFirstName());
         newWriterParams.put("lastName", writer.getLastName());
 
-        crudOperation.insert(tableName, newWriterParams);
-        System.out.print("writer успешно сохранен, " + "id = " + writer.getId());
+        try {
+            ResultSet resultSet = crudOperation.insert(tableName, newWriterParams);
+            if (resultSet.next()) {
+                Integer writerId = resultSet.getInt(1);
+                writer.setId(writerId);
+            }
+            return writer;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void update(Writer updateWriter) {
+    public Writer update(Writer updateWriter) {
         HashMap<String, Object> updateWriterParams = new HashMap<>();
 
-        updateWriterParams.put("id", updateWriter.getId());
         updateWriterParams.put("firstName", updateWriter.getFirstName());
         updateWriterParams.put("lastName", updateWriter.getLastName());
 
-        if (getAll().stream().anyMatch(writer -> writer.getId() == updateWriter.getId())) {
-            crudOperation.updateById(tableName, updateWriterParams, updateWriter.getId());
-            System.out.print("writer успешно обновлен");
-
-        } else {
-            System.out.print("укзанного id нет в таблице");
-        }
+        crudOperation.updateById(tableName, updateWriterParams, updateWriter.getId());
+        System.out.print("writer успешно обновлен");
+        return updateWriter;
     }
 
     @Override
@@ -113,4 +86,105 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
             exception.printStackTrace();
         }
     }
+
+    private List<Writer> mapResultSetToWriter(ResultSet resultSet) throws SQLException {
+
+        List<Writer> writers = new ArrayList<>();
+        while (resultSet.next()) {
+            Integer writerId = resultSet.getInt(1);
+            Writer writer = writers.stream()
+                    .filter(writer1 -> writer1.getId() == writerId)
+                    .findFirst()
+                    .orElse(null);
+
+            if  (writer == null) {
+                writer = new Writer();
+                writer.setId(writerId);
+                writer.setFirstName(resultSet.getString("firstName"));
+                writer.setLastName(resultSet.getString("lastName"));
+                writers.add(writer);
+            }
+
+            int postId = resultSet.getInt(4);
+
+            if (postId != 0) {
+                Post post = new Post();
+                post.setId(postId);
+                post.setContent(resultSet.getString("content"));
+                post.setCreated(resultSet.getString("created"));
+                post.setUpdated(resultSet.getString("updated"));
+                post.setWriterId(writer);
+                post.setPostStatus(PostStatus.valueOf(resultSet.getString("status")));
+
+                int labelId = resultSet.getInt("labelId");
+
+                if (labelId != 0) {
+                    Label label = new Label();
+                    label.setId(labelId);
+                    label.setName(resultSet.getString("name"));
+
+                    post.setLabel(label);
+                }
+
+                writer.setPost(post);
+            }
+        }
+
+        return writers;
+    }
+//    private List<Writer> mapResultSetToWriter(ResultSet resultSet) throws SQLException {
+//
+//        List<Writer> writers = new ArrayList<>();
+//        while (resultSet.next()) {
+//            Writer writer = new Writer();
+//
+//            Integer writerId = resultSet.getInt(1);
+//            String firstName = resultSet.getString("firstName");
+//            String lastName = resultSet.getString("lastName");
+//
+//            Integer postId = resultSet.getInt(4);
+//            String content = resultSet.getString("content");
+//            String created = resultSet.getString("created");
+//            String updated = resultSet.getString("updated");
+//            String status = resultSet.getString("status");
+//
+//            String nameLabel = resultSet.getString("name");
+//            Integer labelId = resultSet.getInt("labelId");
+//
+//            if (status != null) {
+//                List<Post> posts = new ArrayList<>();
+//
+//                Post post = new Post();
+//                if (nameLabel!=null){
+//                    List<Label> labels = new ArrayList<>();
+//                    Label label = new Label();
+//
+//                    label.setName(nameLabel);
+//                    label.setId(labelId);
+//                    labels.add(label);
+//
+//                    post.setLabels(labels);
+//                }
+//                post.setId(postId);
+//                post.setContent(content);
+//                post.setCreated(created);
+//                post.setUpdated(updated);
+//                post.setPostStatus(PostStatus.valueOf(status));
+//
+//                posts.add(post);
+//                writer.setPost(posts);
+//            }
+//
+//            writer.setId(writerId);
+//            writer.setFirstName(firstName);
+//            writer.setLastName(lastName);
+//
+//            writers.add(writer);
+//        }
+//
+//        int s =1;
+//
+//
+//        return writers;
+//    }
 }

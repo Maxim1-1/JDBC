@@ -54,9 +54,6 @@ databaseChangeLog:
               - column:
                   name: name
                   type: varchar(255)
-              - column:
-                  name: postId
-                  type: int
         - createTable:
             tableName: post_labels
             columns:
@@ -66,3 +63,26 @@ databaseChangeLog:
               - column:
                   name: labelId
                   type: int
+
+  - changeSet:
+      - id: 2
+        author: your_name
+        changes:
+          - addForeignKeyConstraint:
+              baseTableName: post_labels
+              baseColumnNames: postId
+              constraintName: fk_post
+              referencedTableName: post
+              referencedColumnNames: id
+          - addForeignKeyConstraint:
+                  baseTableName: post_labels
+                  baseColumnNames: labelId
+                  constraintName: fk_label
+                  referencedTableName: label
+                  referencedColumnNames: id
+          - addForeignKeyConstraint:
+              baseTableName: post
+              baseColumnNames: writerId
+              constraintName: fk_writer
+              referencedTableName: writer
+              referencedColumnNames: id

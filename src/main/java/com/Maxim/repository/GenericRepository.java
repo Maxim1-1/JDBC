@@ -1,5 +1,6 @@
 package com.Maxim.repository;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface GenericRepository <T,ID> {
@@ -7,9 +8,9 @@ public interface GenericRepository <T,ID> {
 
     List<T> getAll();
 
-    void save(T t);
+    T save(T t) throws SQLException;
 
-    void update(T t);
+    T update(T t);
 
     void deleteById(ID id);
 

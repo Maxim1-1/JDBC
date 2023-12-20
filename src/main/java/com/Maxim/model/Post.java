@@ -1,6 +1,7 @@
 package com.Maxim.model;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -12,32 +13,17 @@ public class Post {
     private String created;
     private String updated;
     private PostStatus postStatus;
-    private List<Label> labels;
-    private int writerId;
+    private List<Label> labels=new ArrayList<>();
+    private Writer writer;
 
-    public Post() {
 
-        Date currentDate = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        String formattedDate = dateFormat.format(currentDate);
-
-        this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
-        this.created = formattedDate;
-        this.updated = formattedDate;
+    public Writer getWriterId() {
+        return writer;
     }
 
-    public int getWriterId() {
-        return writerId;
-    }
+    public void setWriterId(Writer writer) {
+        this.writer = writer;
 
-    public void setWriterId(int writerId) {
-        try {
-            this.writerId = writerId;
-        } catch (Exception exception) {
-            System.out.print("Проверьте тип вводимых данных, writerId должно быть целым числом");
-            exception.printStackTrace();
-        }
     }
 
     public PostStatus getPostStatus() {
@@ -86,6 +72,10 @@ public class Post {
 
     public void setLabels(List<Label> labels) {
         this.labels = labels;
+    }
+
+    public void setLabel(Label label) {
+        this.labels.add(label);
     }
 
 }

@@ -1,18 +1,14 @@
 package com.Maxim.model;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Writer {
     private int id;
     private String firstName;
     private String lastName;
-    private List<Post> post;
+    private List<Post> post = new ArrayList<>();
 
-
-    public Writer() {
-        this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
-    }
 
     public void setId(int id) {
         this.id = id;
@@ -41,8 +37,11 @@ public class Writer {
         return post;
     }
 
-    public void setPost(List<Post> post) {
+    public void setPosts(List<Post> post) {
         this.post = post;
+    }
+    public void setPost(Post post) {
+        this.post.add(post);
     }
 
 

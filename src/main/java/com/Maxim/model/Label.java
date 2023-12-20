@@ -6,10 +6,6 @@ public class Label {
     private int id;
     private String name;
 
-    public Label() {
-        this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE)+1;
-    }
-
 
     public int getId() {
         return id;

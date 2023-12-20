@@ -1,9 +1,11 @@
 package com.Maxim.repository.jdbc;
 
 import com.Maxim.model.Label;
+import com.Maxim.model.Post;
+import com.Maxim.model.PostStatus;
 import com.Maxim.repository.LabelRepository;
-import com.Maxim.crud_data_base.base.Connector;
-import com.Maxim.crud_data_base.crud_operation.CrudOperation;
+import com.Maxim.dbutils.Connector;
+import com.Maxim.dbutils.CrudOperation;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -62,31 +64,50 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
         return labels;
     }
 
+    //    @Override
+//    public Label save(Label label) {
+//        HashMap<String, Object> newLabelParams = new HashMap<>();
+//
+//        newLabelParams.put("id", label.getId());
+//        newLabelParams.put("name", label.getName());
+//
+//        crudOperation.insert(tableName, newLabelParams);
+//        System.out.print("label успешно сохранен, " + "id = " + label.getId());
+//        return label;
+//    }
     @Override
-    public void save(Label label) {
-        HashMap<String, Object> newLabelParams = new HashMap<>();
+    public Label save(Label label) throws SQLException {
 
-        newLabelParams.put("id", label.getId());
-        newLabelParams.put("name", label.getName());
+        PreparedStatement preparedStatement = Connector.getPreparedStatementWithGeneratedKeys("INSERT...");
+        preparedStatement.executeUpdate();
 
-        crudOperation.insert(tableName, newLabelParams);
-        System.out.print("label успешно сохранен, " + "id = " + label.getId());
+        ResultSet resultSet = preparedStatement.getGeneratedKeys();
+
+        if (resultSet.next()) {
+            Integer generatedId = resultSet.getInt(1);
+            label.setId(generatedId);
+        }
+
+        return label;
     }
 
     @Override
-    public void update(Label label) {
+    public Label update(Label label) {
         HashMap<String, Object> updateLabelParams = new HashMap<>();
 
         updateLabelParams.put("id", label.getId());
         updateLabelParams.put("name", label.getName());
 
-        if (getAll().stream().anyMatch(label1 -> label1.getId()==label.getId())) {
+        if (getAll().stream().anyMatch(label1 -> label1.getId() == label.getId())) {
             crudOperation.updateById(tableName, updateLabelParams, label.getId());
+
+//   crudOperation.updateById -> Resultset -> mapping ->
             System.out.print("label успешно обновлен");
         } else {
             System.out.print("укзанного id нет в таблице");
         }
 
+        return label;
     }
 
     @Override
@@ -101,4 +122,28 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
         }
 
     }
+
+    private Post mapResultSetToWriter(ResultSet resultSet) throws SQLException {
+
+        Integer id = resultSet.getInt("id");
+        String content = resultSet.getString("content");
+        String created = resultSet.getString("created");
+        String updated = resultSet.getString("updated");
+        String status = resultSet.getString("status");
+        Integer writerId = resultSet.getInt("writerId");
+
+
+        Post post = new Post();
+
+        post.setId(id);
+        post.setLabels(null);
+        post.setContent(content);
+        post.setCreated(created);
+        post.setUpdated(updated);
+        post.setPostStatus(PostStatus.valueOf(status));
+//        post.setWriterId(null);
+
+        return post;
+    }
+
 }

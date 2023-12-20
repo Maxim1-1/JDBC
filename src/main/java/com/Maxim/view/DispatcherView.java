@@ -1,4 +1,4 @@
-package com.Maxim.command_user_handler;
+package com.Maxim.view;
 
 import com.Maxim.controller.LabelController;
 import com.Maxim.controller.PostController;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-public class UserHandler {
+public class DispatcherView {
 
     private static WriterView writerView = new WriterView();
     private static LabelView labelView = new LabelView();
@@ -38,7 +38,8 @@ public class UserHandler {
                 writerController.save(dataFromConsole);
                 break;
             case "get all writers":
-                writerView.getAllWriters(writerController.getAllWriter());
+                List<Writer> allWriters = writerController.getAllWriter();
+                writerView.getAllWriters(allWriters);
                 break;
             case "get writer by id":
                 Integer writerId = writerView.getIdFromConsole("Введите id писателя");
@@ -93,7 +94,8 @@ public class UserHandler {
             case "update post by id":
                 Integer updatePostId = postView.getIdFromConsole("Введите поста id для обновления");
                 HashMap<String, String> updatePostdData = postView.updatePostById();
-                postController.updatePostById(updatePostId,updatePostdData);
+                Post updatedPost = postController.updatePostById(updatePostId,updatePostdData);
+                postView.outputPostDataInConsole(updatedPost);
                 break;
             case "delete post by id":
                 Integer deletePostId = postView.getIdFromConsole("Введите post id для удаления");

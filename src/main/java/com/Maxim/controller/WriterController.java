@@ -35,7 +35,8 @@ public class WriterController {
     }
 
     public void updateWriterById(Integer writerId,HashMap<String, String> updatedData ) {
-        Writer writer = writerService.getWriterById(writerId);
+        Writer writer = new Writer();
+        writer.setId(writerId);
 
         updatedData.forEach((key, value) -> {
             switch (key) {

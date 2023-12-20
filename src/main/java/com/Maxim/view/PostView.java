@@ -83,5 +83,14 @@ public class PostView extends BaseView{
         }
     }
 
+    public void outputPostDataInConsole (Post post) {
+        System.out.print(String.format("id: %s,  content: %s, created: %s, updated: %s, status: %s \n",
+                post.getId(),post.getContent(),post.getCreated(), post.getUpdated(),post.getPostStatus()));
+        System.out.print("Теги поста: \n");
+        for (Label labenName: post.getLabels()) {
+            System.out.print(labenName.getName()+"\n");
+        }
+    }
+
 
 }
