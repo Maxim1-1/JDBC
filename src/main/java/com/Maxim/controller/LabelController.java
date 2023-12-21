@@ -17,8 +17,6 @@ public class LabelController {
         label.setName(dataFromConsole.get("labelName"));
         labelService.saveLabel(label);
     }
-
-
     public Label getLabelById(Integer labelId) {
         return labelService.getLabelById(labelId);
     }

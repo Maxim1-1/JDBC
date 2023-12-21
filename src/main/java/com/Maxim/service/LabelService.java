@@ -8,17 +8,13 @@ import java.util.List;
 
 public class LabelService {
 
-    private static  JDBCLabelRepositoryImpl jdbc = new JDBCLabelRepositoryImpl();
+    private final JDBCLabelRepositoryImpl jdbc = new JDBCLabelRepositoryImpl();
 
-    public void saveLabel(Label label) {
-        try {
-            jdbc.save(label);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public Label saveLabel(Label label) {
+        return jdbc.save(label);
     }
 
-    public Label getLabelById(Integer labelId){
+    public Label getLabelById(Integer labelId) {
         return jdbc.getById(labelId);
     }
 
@@ -26,11 +22,11 @@ public class LabelService {
         return jdbc.getAll();
     }
 
-    public void updateLabel(Label label) {
-        jdbc.update(label);
+    public Label updateLabel(Label label) {
+        return jdbc.update(label);
     }
 
-    public void deleteLabelById (Integer id){
+    public void deleteLabelById(Integer id) {
         jdbc.deleteById(id);
     }
 }

@@ -46,7 +46,7 @@ public class WriterServiceTest {
         post.getContent();
         post.getCreated();
         post.getUpdated();
-        post.getWriterId();
+        post.getWriter();
         post.getPostStatus();
 
         List<Post> posts = new ArrayList<>();
@@ -84,7 +84,7 @@ public class WriterServiceTest {
         post.getContent();
         post.getCreated();
         post.getUpdated();
-        post.getWriterId();
+        post.getWriter();
         post.getPostStatus();
 
         List<Post> posts = new ArrayList<>();
@@ -144,7 +144,7 @@ public class WriterServiceTest {
         post.getContent();
         post.getCreated();
         post.getUpdated();
-        post.getWriterId();
+        post.getWriter();
         post.getPostStatus();
         List<Post> posts = new ArrayList<>();
         posts.add(post);

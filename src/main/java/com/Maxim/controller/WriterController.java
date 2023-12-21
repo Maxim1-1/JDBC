@@ -10,8 +10,6 @@ import java.util.List;
 public class WriterController {
 
     private WriterService writerService = new WriterService();
-    private WriterView writerView = new WriterView();
-
 
     public void save(HashMap<String,String> dataFromConsole ) {
         Writer writer = new Writer();

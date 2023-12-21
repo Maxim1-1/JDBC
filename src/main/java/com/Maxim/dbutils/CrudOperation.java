@@ -25,11 +25,6 @@ public class CrudOperation {
         return select(sqlExpression);
     }
 
-    public ResultSet selectById(String mainTable, String subTable, String mainForeignKey, String subForeignKey, Integer id) throws SQLException {
-        String sqlExpression = String.format("SELECT * FROM %s join %s on %s.%s=%s.%s where id=%s;", mainTable, subTable, mainTable, mainForeignKey, subTable, subForeignKey, id);
-        return select(sqlExpression);
-    }
-
     private ResultSet select(String sqlExpression) throws SQLException {
 
         PreparedStatement statement = Connector.getPreparedStatementWithGeneratedKeys(sqlExpression);

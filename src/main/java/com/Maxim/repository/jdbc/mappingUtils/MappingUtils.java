@@ -28,7 +28,7 @@ public class MappingUtils {
             post.setContent(resultSet.getString("content"));
             post.setCreated(resultSet.getString("created"));
             post.setUpdated(resultSet.getString("updated"));
-            post.setWriterId(writer);
+            post.setWriter(writer);
             post.setPostStatus(PostStatus.valueOf(resultSet.getString("status")));
             if (labelId != 0) {
                 Label label = new Label();

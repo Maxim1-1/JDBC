@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 1
-      author: your_name
+      author: maxim
       changes:
         - createTable:
             tableName: writer
@@ -32,10 +32,13 @@ databaseChangeLog:
                   type: varchar(255)
               - column:
                   name: created
-                  type: date
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
               - column:
                   name: updated
-                  type: date
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  valueComputed: 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'
               - column:
                   name: writerId
                   type: int
@@ -63,10 +66,13 @@ databaseChangeLog:
               - column:
                   name: labelId
                   type: int
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: labelId_unique
 
   - changeSet:
       - id: 2
-        author: your_name
+        author: maxim
         changes:
           - addForeignKeyConstraint:
               baseTableName: post_labels
@@ -75,11 +81,11 @@ databaseChangeLog:
               referencedTableName: post
               referencedColumnNames: id
           - addForeignKeyConstraint:
-                  baseTableName: post_labels
-                  baseColumnNames: labelId
-                  constraintName: fk_label
-                  referencedTableName: label
-                  referencedColumnNames: id
+              baseTableName: post_labels
+              baseColumnNames: labelId
+              constraintName: fk_label
+              referencedTableName: label
+              referencedColumnNames: id
           - addForeignKeyConstraint:
               baseTableName: post
               baseColumnNames: writerId

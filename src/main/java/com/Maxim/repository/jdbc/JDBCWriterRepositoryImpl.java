@@ -20,11 +20,12 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     public Writer getById(Integer writerId) {
 
         try {
-            ResultSet resultSet = crudOperation.selectRowQuery("SELECT *\n" +
+            ResultSet resultSet = crudOperation.selectRowQuery(String.format("SELECT *\n" +
                     "FROM writer\n" +
                     "LEFT JOIN post ON post.writerId = writer.id\n" +
                     "LEFT JOIN post_labels ON post.id = post_labels.postid\n" +
-                    "LEFT JOIN label ON post_labels.labelid = label.id ;\n");
+                    "LEFT JOIN label ON post_labels.labelid = label.id where writer.id = %d;\n",writerId));
+
             return mapResultSetToWriter(resultSet).get(0);
 
         } catch (SQLException e) {

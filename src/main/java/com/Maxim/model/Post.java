@@ -1,11 +1,7 @@
 package com.Maxim.model;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Post {
     private int id;
@@ -17,11 +13,11 @@ public class Post {
     private Writer writer;
 
 
-    public Writer getWriterId() {
+    public Writer getWriter() {
         return writer;
     }
 
-    public void setWriterId(Writer writer) {
+    public void setWriter(Writer writer) {
         this.writer = writer;
 
     }

@@ -8,10 +8,10 @@ import java.util.List;
 
 public class WriterService {
 
-    private static final JDBCWriterRepositoryImpl jdbc = new JDBCWriterRepositoryImpl();
+    private final JDBCWriterRepositoryImpl jdbc = new JDBCWriterRepositoryImpl();
 
-    public void save(Writer writer) {
-        jdbc.save(writer);
+    public Writer save(Writer writer) {
+        return jdbc.save(writer);
     }
 
     public Writer getWriterById(Integer writerId){
@@ -22,8 +22,8 @@ public class WriterService {
         return jdbc.getAll();
     }
 
-    public void updateWriter(Writer writer) {
-        jdbc.update(writer);
+    public Writer updateWriter(Writer writer) {
+        return jdbc.update(writer);
     }
 
     public void deleteWriterById (Integer id){

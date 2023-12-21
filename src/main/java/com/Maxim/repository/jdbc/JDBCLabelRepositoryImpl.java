@@ -42,7 +42,7 @@ public class JDBCLabelRepositoryImpl implements LabelRepository {
     }
 
     @Override
-    public Label save(Label label) throws SQLException {
+    public Label save(Label label)  {
 
         HashMap<String, Object> newWriterParams = new HashMap<>();
         newWriterParams.put("name", label.getName());
