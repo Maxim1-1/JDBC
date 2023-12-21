@@ -16,11 +16,10 @@ public class PostController {
 
     private PostService postService = new PostService();
 
-    public void savePost(HashMap<String, String> dataFromConsole) {
+    public Post savePost(HashMap<String, String> dataFromConsole) {
         Post post = new Post();
         WriterService writerService = new WriterService();
         LabelService labelService = new LabelService();
-
         Writer writer;
 
         if (dataFromConsole.get("writerId") != null) {
@@ -35,9 +34,8 @@ public class PostController {
         post.setPostStatus(PostStatus.UNDER_REVIEW);
         post.setWriter(writer);
 
-
         if (dataFromConsole.get("labelPost") != null) {
-            Label userLabel = labelService.getAllLabels().stream().filter(label1 -> label1.getName()==post.getLabels().get(0).getName()).findFirst().orElse(null);
+            Label userLabel = labelService.getAllLabels().stream().filter(label1 -> label1.getName().equalsIgnoreCase(dataFromConsole.get("labelPost"))).findFirst().orElse(null);
             if (userLabel==null){
                 Label newLabel = new Label();
                 newLabel.setName(dataFromConsole.get("labelPost"));
@@ -47,9 +45,8 @@ public class PostController {
             } else {
                 post.setLabel(userLabel);
             }
-
         }
-        postService.savePost(post);
+       return postService.savePost(post);
 
     }
 
@@ -74,15 +71,6 @@ public class PostController {
             switch (key) {
                 case "content":
                     post.setContent(updatedData.get("content"));
-                    break;
-                case "created":
-                    post.setCreated(updatedData.get("created"));
-                    break;
-                case "updated":
-                    post.setUpdated(updatedData.get("updated"));
-                    break;
-                case "writerId":
-//                    post.setWriterId(Integer.parseInt(updatedData.get("writerId")));
                     break;
                 case "status":
                     post.setPostStatus(PostStatus.valueOf(updatedData.get("status")));

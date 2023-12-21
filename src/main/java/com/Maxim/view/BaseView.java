@@ -17,4 +17,10 @@ public class BaseView {
         }
         return null;
     }
+
+    public void successCreate(Integer id){
+        System.out.print("Запись успешно добавлена, id = "+id);
+    }
+
+
 }

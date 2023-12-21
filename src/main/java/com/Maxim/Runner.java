@@ -13,8 +13,8 @@ public class Runner {
 
         Scanner scanner = new Scanner(System.in);
 
-//        LiquibaseRunner liquibase = new LiquibaseRunner();
-//        liquibase.run();
+        LiquibaseRunner liquibase = new LiquibaseRunner();
+        liquibase.run();
 
         while (true) {
             System.out.println("Для выхода еще раз введите exit, для продолжения введите любой символ");

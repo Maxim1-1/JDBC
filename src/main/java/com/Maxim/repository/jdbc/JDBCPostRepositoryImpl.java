@@ -22,12 +22,12 @@ public class JDBCPostRepositoryImpl implements PostRepository {
     @Override
     public Post getById(Integer id) {
         try {
-            ResultSet resultSet = crudOperation.selectRowQuery(String.format(  "SELECT *\n" +
-                            "FROM post\n" +
-                            "LEFT JOIN writer ON post.writerId = writer.id\n" +
-                            "LEFT JOIN post_labels ON post.id = post_labels.postid\n" +
-                            "LEFT JOIN label ON post_labels.labelid = label.id where post.id = %d;",id)
-                  );
+            ResultSet resultSet = crudOperation.selectRowQuery(String.format("SELECT *\n" +
+                    "FROM post\n" +
+                    "LEFT JOIN writer ON post.writerId = writer.id\n" +
+                    "LEFT JOIN post_labels ON post.id = post_labels.postid\n" +
+                    "LEFT JOIN label ON post_labels.labelid = label.id where post.id = %d;", id)
+            );
             return mapResultSetToPost(resultSet).get(0);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -52,18 +52,20 @@ public class JDBCPostRepositoryImpl implements PostRepository {
     @Override
     public Post save(Post post) {
         HashMap<String, Object> newPostParams = new HashMap<>();
-
         newPostParams.put("content", post.getContent());
         newPostParams.put("writerId", post.getWriter().getId());
         newPostParams.put("status", post.getPostStatus());
-
         try {
             ResultSet resultSet = crudOperation.insert(tableName, newPostParams);
+            Integer generatePostId = null;
             if (resultSet.next()) {
-                Integer postId = resultSet.getInt(1);
-                return getById(postId);
+                generatePostId = resultSet.getInt(1);
             }
-            return post;
+            HashMap<String, Object> postLabelsTableParams = new HashMap<>();
+            postLabelsTableParams.put("postId", generatePostId);
+            postLabelsTableParams.put("labelId",post.getLabels().get(0).getId());
+            crudOperation.insert("post_labels", postLabelsTableParams);
+            return getById(generatePostId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -94,11 +96,13 @@ public class JDBCPostRepositoryImpl implements PostRepository {
     @Override
     public void deleteById(Integer id) {
         try {
-            crudOperation.delete(tableName, id);
+            crudOperation.selectRowQuery(String.format("UPDATE %s SET `status` = 'DELETED' WHERE (id = %d);",tableName,id));
             System.out.print("post успешно удален");
         } catch (NullPointerException exception) {
             System.out.print("укзанного id нет в таблице");
             exception.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -126,11 +130,11 @@ public class JDBCPostRepositoryImpl implements PostRepository {
                 post.setWriter(writer);
 
                 post.setPostStatus(PostStatus.valueOf(resultSet.getString("status")));
-                MappingUtils.addLabelToPost(resultSet,post,labelId);
+                MappingUtils.addLabelToPost(resultSet, post, labelId);
                 posts.add(post);
             }
-            MappingUtils.addLabelToPost(resultSet,post,labelId);
-            }
-            return posts;
+            MappingUtils.addLabelToPost(resultSet, post, labelId);
         }
+        return posts;
     }
+}

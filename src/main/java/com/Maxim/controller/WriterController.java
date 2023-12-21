@@ -11,11 +11,11 @@ public class WriterController {
 
     private WriterService writerService = new WriterService();
 
-    public void save(HashMap<String,String> dataFromConsole ) {
+    public Writer save(HashMap<String, String> dataFromConsole) {
         Writer writer = new Writer();
         writer.setFirstName(dataFromConsole.get("firstName"));
         writer.setLastName(dataFromConsole.get("lastName"));
-        writerService.save(writer);
+        return writerService.save(writer);
     }
 
 
@@ -25,14 +25,14 @@ public class WriterController {
     }
 
     public List<Writer> getAllWriter() {
-       return writerService.getAllWriters();
+        return writerService.getAllWriters();
     }
 
     public void deleteWriterById(Integer writerId) {
         writerService.deleteWriterById(writerId);
     }
 
-    public void updateWriterById(Integer writerId,HashMap<String, String> updatedData ) {
+    public void updateWriterById(Integer writerId, HashMap<String, String> updatedData) {
         Writer writer = new Writer();
         writer.setId(writerId);
 

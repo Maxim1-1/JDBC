@@ -66,9 +66,6 @@ databaseChangeLog:
               - column:
                   name: labelId
                   type: int
-                  constraints:
-                    unique: true
-                    uniqueConstraintName: labelId_unique
 
   - changeSet:
       - id: 2

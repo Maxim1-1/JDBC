@@ -9,13 +9,11 @@ import java.util.List;
 
 public class LabelController {
     private  LabelService labelService = new LabelService();
-    private  LabelView labelView = new LabelView();
 
-
-    public void save(HashMap<String, String> dataFromConsole) {
+    public Label save(HashMap<String, String> dataFromConsole) {
         Label label = new Label();
         label.setName(dataFromConsole.get("labelName"));
-        labelService.saveLabel(label);
+        return labelService.saveLabel(label);
     }
     public Label getLabelById(Integer labelId) {
         return labelService.getLabelById(labelId);

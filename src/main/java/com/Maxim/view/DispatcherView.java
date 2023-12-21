@@ -35,7 +35,8 @@ public class DispatcherView {
         switch (command) {
             case "create writer":
                 HashMap<String, String> dataFromConsole = writerView.create();
-                writerController.save(dataFromConsole);
+                Writer createdWriter = writerController.save(dataFromConsole);
+                writerView.successCreate(createdWriter.getId());
                 break;
             case "get all writers":
                 List<Writer> allWriters = writerController.getAllWriter();
@@ -66,7 +67,8 @@ public class DispatcherView {
                 break;
             case "create label":
                 HashMap<String, String> labelDataFromConsole = labelView.create();
-                labelController.save(labelDataFromConsole);
+                Label createdLabel = labelController.save(labelDataFromConsole);
+                labelView.successCreate(createdLabel.getId());
                 break;
             case "update label by id":
                 Integer updateLabelId = labelView.getIdFromConsole("Введите label id для обновления");
@@ -88,7 +90,8 @@ public class DispatcherView {
                 break;
             case "create post":
                 HashMap<String, String> postDataFromConsole = postView.create();
-                postController.savePost(postDataFromConsole);
+                Post createdPost = postController.savePost(postDataFromConsole);
+                postView.successCreate(createdPost.getId());
                 break;
             case "update post by id":
                 Integer updatePostId = postView.getIdFromConsole("Введите поста id для обновления");
