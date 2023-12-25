@@ -8,7 +8,7 @@ public interface GenericRepository <T,ID> {
 
     List<T> getAll();
 
-    T save(T t) throws SQLException;
+    T save(T t) ;
 
     T update(T t);
 

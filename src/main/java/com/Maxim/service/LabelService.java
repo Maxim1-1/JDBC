@@ -1,32 +1,32 @@
 package com.Maxim.service;
 
 import com.Maxim.model.Label;
+import com.Maxim.repository.LabelRepository;
 import com.Maxim.repository.jdbc.JDBCLabelRepositoryImpl;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class LabelService {
 
-    private final JDBCLabelRepositoryImpl jdbc = new JDBCLabelRepositoryImpl();
+    private final LabelRepository repository = new JDBCLabelRepositoryImpl();
 
     public Label saveLabel(Label label) {
-        return jdbc.save(label);
+        return repository.save(label);
     }
 
     public Label getLabelById(Integer labelId) {
-        return jdbc.getById(labelId);
+        return repository.getById(labelId);
     }
 
     public List<Label> getAllLabels() {
-        return jdbc.getAll();
+        return repository.getAll();
     }
 
     public Label updateLabel(Label label) {
-        return jdbc.update(label);
+        return repository.update(label);
     }
 
     public void deleteLabelById(Integer id) {
-        jdbc.deleteById(id);
+        repository.deleteById(id);
     }
 }

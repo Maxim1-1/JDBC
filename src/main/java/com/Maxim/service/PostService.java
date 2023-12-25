@@ -1,38 +1,34 @@
 package com.Maxim.service;
 
 
-import com.Maxim.dbutils.CrudOperation;
-import com.Maxim.model.Label;
 import com.Maxim.model.Post;
+import com.Maxim.repository.PostRepository;
 import com.Maxim.repository.jdbc.JDBCPostRepositoryImpl;
 
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 
 public class PostService {
 
-    private final JDBCPostRepositoryImpl jdbc = new JDBCPostRepositoryImpl();
+    private final PostRepository repository = new JDBCPostRepositoryImpl();
 
     public Post savePost(Post post) {
-       return jdbc.save(post);
+       return repository.save(post);
     }
 
     public Post getPostById(Integer postId) {
-        return jdbc.getById(postId);
+        return repository.getById(postId);
     }
 
     public List<Post> getAllPosts() {
-        return jdbc.getAll();
+        return repository.getAll();
     }
 
     public Post updatePostById(Post post) {
-        return jdbc.update(post);
+        return repository.update(post);
     }
 
     public void deletePostById(Integer id) {
-        jdbc.deleteById(id);
+        repository.deleteById(id);
     }
 }
